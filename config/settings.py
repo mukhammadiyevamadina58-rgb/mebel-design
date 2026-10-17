@@ -28,7 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'culpable-manicotti-octane.ngrok-free.dev',  
+    'culpable-manicotti-octane.ngrok-free.dev',
+    'mebel-design.onrender.com',  
 ]
 
 
