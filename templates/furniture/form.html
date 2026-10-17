@@ -1,0 +1,424 @@
+{% extends 'base.html' %}
+
+{% block title %}Loyihani tahrirlash - MebelPro{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="page-title-wrapper">
+        <h4 class="fw-bold m-0">Loyihani tahrirlash</h4>
+        <div class="title-badge-box">
+            <small class="text-muted">Loyihangizni o'zgartiring va yangilang</small>
+            <i class="bi bi-pencil-square fs-5 text-secondary ms-2"></i>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-4">
+    <form method="post" id="furnitureForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row g-4">
+            
+            <!-- CHAP TARAFI: Parametrlar paneli -->
+            <div class="col-lg-5 col-md-6">
+                <div class="card p-4 shadow-sm border-0 rounded-3 bg-white">
+                    
+                    <!-- Loyiha nomi -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Loyiha nomi</label>
+                        <input type="text" name="title" class="form-control" value="{{ form.title.value|default:project.title }}" required>
+                    </div>
+
+                    <!-- Mebel turi (Erkin matn yoki tanlov) -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Mebel turi</label>
+                        <input type="text" id="furnitureTypeInput" name="furniture_type" class="form-control" value="{{ form.furniture_type.value|default:project.furniture_type }}" placeholder="Masalan: Stol, Shkaf, Oshxona..." required>
+                    </div>
+
+                    <!-- Mebel o'lchamlari (sm) -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">1. Mebel o'lchamlari (sm)</label>
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <span class="form-text small">Mebel Eni</span>
+                                <input type="number" id="widthInput" name="width" class="form-control" value="{{ form.width.value|default:project.width }}">
+                            </div>
+                            <div class="col-4">
+                                <span class="form-text small">Mebel Bo'yi</span>
+                                <input type="number" id="heightInput" name="height" class="form-control" value="{{ form.height.value|default:project.height }}">
+                            </div>
+                            <div class="col-4">
+                                <span class="form-text small">Chuqurligi</span>
+                                <input type="number" id="depthInput" name="depth" class="form-control" value="{{ form.depth.value|default:project.depth }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Taxta o'lchami va narxi -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-success">2. Taxta (List) o'lchami va Narxi</label>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6">
+                                <span class="form-text small">1 ta List Eni (m)</span>
+                                <input type="number" step="0.01" id="boardWidthInput" name="board_width" class="form-control" value="{{ form.board_width.value|default:2.75 }}">
+                            </div>
+                            <div class="col-6">
+                                <span class="form-text small">1 ta List Bo'yi (m)</span>
+                                <input type="number" step="0.01" id="boardHeightInput" name="board_height" class="form-control" value="{{ form.board_height.value|default:1.83 }}">
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <span class="form-text small">1 ta List narxi (so'm)</span>
+                                <input type="number" id="singleBoardPriceInput" name="single_board_price" class="form-control" value="{{ form.single_board_price.value|default:250000 }}">
+                            </div>
+                            <div class="col-6">
+                                <span class="form-text small">Ketgan list soni (ta)</span>
+                                <input type="number" id="boardCountInput" name="board_count" class="form-control" value="{{ form.board_count.value|default:2 }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detallar -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-bold small">Eshiklar soni</label>
+                            <input type="number" name="doors_count" class="form-control" value="{{ form.doors_count.value|default:project.doors_count }}">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-bold small">Tokchalar soni</label>
+                            <input type="number" name="shelves_count" class="form-control" value="{{ form.shelves_count.value|default:project.shelves_count }}">
+                        </div>
+                    </div>
+
+                    <!-- Material & Qalinlik -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-bold small">Material</label>
+                            <select name="material" class="form-select">
+                                <option value="MDF" {% if form.material.value == 'MDF' %}selected{% endif %}>MDF</option>
+                                <option value="LSP" {% if form.material.value == 'LSP' %}selected{% endif %}>DSP / LDSP</option>
+                                <option value="Yog'och" {% if form.material.value == "Yog'och" %}selected{% endif %}>Tabiiy yog'och</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-bold small">Qalinligi</label>
+                            <select name="thickness" class="form-select">
+                                <option value="16 mm" {% if form.thickness.value == '16 mm' %}selected{% endif %}>16 mm</option>
+                                <option value="18 mm" {% if form.thickness.value == '18 mm' or not form.thickness.value %}selected{% endif %}>18 mm</option>
+                                <option value="22 mm" {% if form.thickness.value == '22 mm' %}selected{% endif %}>22 mm</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Rang / Tekstura (Galereya) -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Rang / Tekstura</label>
+                        <!-- Django formaning asl rang inputi (yashirin) -->
+                        <div style="display: none;">
+                            <input type="text" id="selectedColorInput" name="color" value="{{ form.color.value|default:'' }}">
+                        </div>
+
+                        <div class="row g-2 p-2 border rounded-3 bg-light shadow-sm" style="max-height: 220px; overflow-y: auto;" id="texture-selector-container">
+                            {% for color in available_colors %}
+                            <div class="col-4">
+                                <div class="texture-card border rounded-2 p-2 text-center bg-white {% if form.color.value == color.id|stringformat:'s' or form.color.value == color.name %}border-primary bg-light{% endif %}" 
+                                     data-color-id="{{ color.id }}" 
+                                     data-color-url="{{ color.image.url }}" 
+                                     data-color-name="{{ color.name }}"
+                                     style="cursor: pointer; transition: all 0.2s;">
+                                    <div style="width: 100%; aspect-ratio: 1 / 1; background-image: url('{{ color.image.url }}'); background-size: cover; background-position: center;" class="rounded-1 mb-1 border"></div>
+                                    <span class="d-block text-truncate text-dark fw-medium" style="font-size: 10px;">{{ color.name }}</span>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="col-12 text-center py-2 text-muted small">
+                                Hozircha MDF ranglari qo'shilmagan.
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Yashirin hisob-kitob maydonlari -->
+                    <input type="hidden" id="areaInput" name="total_area" value="{{ form.total_area.value|default:0 }}">
+                    <input type="hidden" id="pricePerSqmInput" name="price_per_sqm" value="{{ form.price_per_sqm.value|default:0 }}">
+
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold rounded-2 mt-2">
+                        <i class="bi bi-floppy me-2"></i> O'zgarishlarni saqlash
+                    </button>
+                </div>
+            </div>
+
+            <!-- O'NG TARAFI: 3D Interaktiv Vizualizatsiya va Narx -->
+            <div class="col-lg-7 col-md-6">
+                <div class="card p-4 shadow-sm border-0 rounded-3 bg-white h-100 d-flex flex-column justify-content-between sticky-top" style="top: 20px;">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold m-0 text-dark" id="preview-title">Mebel loyihasi</h5>
+                        <span class="badge bg-secondary" id="dimension-info">O'lcham: <span id="val-w">0</span> x <span id="val-h">0</span> x <span id="val-d">0</span> sm</span>
+                    </div>
+
+                    <!-- 3D Sahnaning Asosiy Qismi -->
+                    <div class="scene-container text-center my-auto py-5 bg-light rounded-3 border border-dashed position-relative overflow-hidden" style="min-height: 350px; display: flex; align-items: center; justify-content: center; cursor: grab;">
+                        
+                        <!-- Agar ma'lumotlar to'liq bo'lmasa chiqadigan placeholder -->
+                        <div id="placeholder-box" class="d-flex flex-column align-items-center justify-content-center">
+                            <i id="preview-icon" class="bi bi-box-seam fs-2 mb-2 text-secondary"></i>
+                            <h5 class="text-secondary fw-bold">Mebel interaktiv ko'rinishi</h5>
+                            <p class="text-muted small">Mebel turi, o'lchamlari va yog'och rangini tanlang</p>
+                        </div>
+
+                        <!-- Interaktiv 3D Quti / Model -->
+                        <div id="scene-wrapper" style="display: none; perspective: 1000px; width: 100%; height: 100%; align-items: center; justify-content: center;">
+                            <div id="box-3d" style="width: 180px; height: 120px; transition: transform 0.1s ease; transform-style: preserve-3d; position: relative;">
+                                <!-- Dinamik ravishda JS orqali to'ldiriladi -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Narx va Yakuniy Ma'lumotlar -->
+                    <div class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center mt-3 border">
+                        <div>
+                            <span class="text-muted small d-block">Jami hisoblangan narx:</span>
+                            <h4 class="fw-bold text-success m-0"><span id="total-price">0</span> so'm</h4>
+                        </div>
+                        <div class="text-end">
+                            <small class="text-muted d-block">Jami yuzasi: <span id="show-total-area">0</span> kv.m</small>
+                            <small class="text-muted">List soni: <span id="show-board-count">0</span> ta</small>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<!-- Dinamik 3D va Hisob-kitob JavaScript kodi -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const widthInput = document.getElementById("widthInput");
+    const heightInput = document.getElementById("heightInput");
+    const depthInput = document.getElementById("depthInput");
+    
+    const boardWidthInput = document.getElementById("boardWidthInput");
+    const boardHeightInput = document.getElementById("boardHeightInput");
+    const singleBoardPriceInput = document.getElementById("singleBoardPriceInput");
+    const boardCountInput = document.getElementById("boardCountInput");
+    
+    const furnitureTypeElement = document.getElementById("furnitureTypeSelect") || document.getElementById("furnitureTypeInput");
+    const colorInput = document.getElementById("selectedColorInput");
+    const areaInput = document.getElementById("areaInput");
+    const pricePerSqmInput = document.getElementById("pricePerSqmInput");
+    
+    const valW = document.getElementById("val-w");
+    const valH = document.getElementById("val-h");
+    const valD = document.getElementById("val-d");
+    const box3d = document.getElementById("box-3d");
+    const previewTitle = document.getElementById("preview-title");
+    const previewIcon = document.getElementById("preview-icon");
+    
+    const placeholderBox = document.getElementById("placeholder-box");
+    const sceneWrapper = document.getElementById("scene-wrapper");
+    const dimensionInfo = document.getElementById("dimension-info");
+    const totalPriceElement = document.getElementById("total-price");
+    
+    const showBoardCountEl = document.getElementById("show-board-count");
+    const showSingleAreaEl = document.getElementById("show-single-area");
+    const showTotalAreaEl = document.getElementById("show-total-area");
+
+    let selectedTextureUrl = "";
+    let selectedTextureName = "";
+
+    // Agar bazadan oldin tanlangan rang kelgan bo'lsa, uni topib belgilaymiz
+    const initialColorVal = colorInput ? colorInput.value : "";
+    const textureCards = document.querySelectorAll(".texture-card");
+    
+    textureCards.forEach(card => {
+        const cId = card.getAttribute("data-color-id");
+        const cName = card.getAttribute("data-color-name");
+        const cUrl = card.getAttribute("data-color-url");
+
+        if (initialColorVal && (initialColorVal === cId || initialColorVal === cName)) {
+            card.classList.add("border-primary", "bg-light");
+            card.style.boxShadow = "0 0 0 2px rgba(13, 110, 253, 0.25)";
+            selectedTextureUrl = cUrl;
+            selectedTextureName = cName;
+        }
+
+        card.addEventListener("click", function() {
+            textureCards.forEach(c => {
+                c.classList.remove("border-primary", "bg-light");
+                c.style.boxShadow = "none";
+            });
+            this.classList.add("border-primary", "bg-light");
+            this.style.boxShadow = "0 0 0 2px rgba(13, 110, 253, 0.25)";
+
+            selectedTextureUrl = this.getAttribute("data-color-url");
+            selectedTextureName = this.getAttribute("data-color-name");
+            const colorId = this.getAttribute("data-color-id");
+
+            if (colorInput) {
+                colorInput.value = colorId || selectedTextureName;
+            }
+
+            updateFurnitureApp();
+        });
+    });
+
+    function updateFurnitureApp() {
+        const w = parseFloat(widthInput.value) || 0;
+        const h = parseFloat(heightInput.value) || 0;
+        const d = parseFloat(depthInput.value) || 0;
+        
+        const bW = parseFloat(boardWidthInput.value) || 0;
+        const bH = parseFloat(boardHeightInput.value) || 0;
+        const singlePrice = parseFloat(singleBoardPriceInput.value) || 0;
+        const boardCount = parseFloat(boardCountInput.value) || 0;
+        
+        let furnitureTypeVal = "";
+        if (furnitureTypeElement) {
+            if (furnitureTypeElement.tagName === "SELECT" && furnitureTypeElement.selectedIndex >= 0) {
+                furnitureTypeVal = furnitureTypeElement.options[furnitureTypeElement.selectedIndex].text;
+            } else {
+                furnitureTypeVal = furnitureTypeElement.value;
+            }
+        }
+
+        const singleBoardArea = bW * bH;
+        const totalArea = singleBoardArea * boardCount;
+        const pricePerSqm = singleBoardArea > 0 ? (singlePrice / singleBoardArea) : 0;
+
+        if (areaInput) areaInput.value = totalArea.toFixed(2);
+        if (pricePerSqmInput) pricePerSqmInput.value = Math.round(pricePerSqm);
+
+        if (showBoardCountEl) showBoardCountEl.textContent = boardCount;
+        if (showTotalAreaEl) showTotalAreaEl.textContent = totalArea.toFixed(2);
+
+        let totalPrice = Math.round(boardCount * singlePrice);
+        if (totalPriceElement) {
+            totalPriceElement.textContent = totalPrice.toLocaleString('uz-UZ');
+        }
+
+        const isComplete = w > 0 && h > 0 && d > 0 && furnitureTypeVal.trim() !== "" && selectedTextureUrl !== "";
+
+        if (!isComplete) {
+            if(placeholderBox) placeholderBox.style.display = "flex";
+            if(sceneWrapper) sceneWrapper.style.display = "none";
+            if(dimensionInfo) dimensionInfo.style.display = "none";
+            return;
+        }
+
+        if(placeholderBox) placeholderBox.style.display = "none";
+        if(sceneWrapper) sceneWrapper.style.display = "flex";
+        if(dimensionInfo) dimensionInfo.style.display = "inline-block";
+
+        if(valW) valW.textContent = w;
+        if(valH) valH.textContent = h;
+        if(valD) valD.textContent = d;
+
+        if(previewTitle) previewTitle.textContent = furnitureTypeVal;
+
+        let iconClass = "bi-box-seam";
+        let typeLower = furnitureTypeVal.toLowerCase();
+        if (typeLower.includes('shkaf')) iconClass = "bi-door-closed";
+        else if (typeLower.includes('stol')) iconClass = "bi-table";
+        else if (typeLower.includes('oshxona')) iconClass = "bi-cup-hot";
+        
+        if(previewIcon) previewIcon.className = `bi ${iconClass} fs-2 mb-2`;
+
+        // 3D Model tuzilishi
+        if(box3d) {
+            let textureUrl = selectedTextureUrl;
+            box3d.style.position = "relative";
+            box3d.style.transformStyle = "preserve-3d";
+
+            let boxW = Math.min(Math.max(w * 0.6, 120), 220);
+            let boxH = Math.min(Math.max(h * 0.5, 100), 220);
+            let boxD = Math.min(Math.max(d * 0.6, 60), 140);
+
+            box3d.style.width = boxW + "px";
+            box3d.style.height = boxH + "px";
+
+            let halfW = boxW / 2;
+            let halfH = boxH / 2;
+            let halfD = boxD / 2;
+
+            if (typeLower.includes('stol')) {
+                iconClass = "bi-table";
+                box3d.innerHTML = `
+                    <div style="position: absolute; width: 100%; height: 25px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #333; transform: translateZ(${halfD}px); top: 0;"></div>
+                    <div style="position: absolute; width: 100%; height: 25px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #333; transform: rotateY(180deg) translateZ(${halfD}px); top: 0;"></div>
+                    <div style="position: absolute; width: 14px; height: ${boxH - 25}px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #333; transform: translateX(10px) translateY(25px) translateZ(${halfD - 10}px);"></div>
+                    <div style="position: absolute; width: 14px; height: ${boxH - 25}px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #333; transform: translateX(${boxW - 24}px) translateY(25px) translateZ(${halfD - 10}px);"></div>
+                    <div style="position: absolute; width: 14px; height: ${boxH - 25}px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #333; transform: translateX(10px) translateY(25px) translateZ(${-halfD + 10}px);"></div>
+                    <div style="position: absolute; width: 14px; height: ${boxH - 25}px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #333; transform: translateX(${boxW - 24}px) translateY(25px) translateZ(${-halfD + 10}px);"></div>
+                `;
+            } else if (typeLower.includes('oshxona')) {
+                iconClass = "bi-cup-hot";
+                box3d.innerHTML = `
+                    <div style="position: absolute; width: 100%; height: ${boxH * 0.7}px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #333; transform: translateZ(${halfD}px); bottom: 0;"></div>
+                    <div style="position: absolute; width: 100%; height: ${boxH * 0.7}px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #333; transform: rotateY(180deg) translateZ(${halfD}px); bottom: 0;"></div>
+                    <div style="position: absolute; width: 90%; height: ${boxH * 0.25}px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #333; transform: translateZ(${halfD * 0.8}px); top: 0; left: 5%;"></div>
+                `;
+            } else {
+                box3d.innerHTML = `
+                    <div style="position: absolute; width: 100%; height: 100%; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #444; transform: translateZ(${halfD}px);"></div>
+                    <div style="position: absolute; width: 100%; height: 100%; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #444; transform: rotateY(180deg) translateZ(${halfD}px);"></div>
+                    <div style="position: absolute; width: ${boxD}px; height: 100%; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #444; transform: rotateY(-90deg) translateZ(${halfW}px); left: ${halfW - halfD}px;"></div>
+                    <div style="position: absolute; width: ${boxD}px; height: 100%; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #444; transform: rotateY(90deg) translateZ(${halfW}px); left: ${halfW - halfD}px;"></div>
+                    <div style="position: absolute; width: 100%; height: ${boxD}px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #444; transform: rotateX(90deg) translateZ(${halfH}px); top: ${halfH - halfD}px;"></div>
+                    <div style="position: absolute; width: 100%; height: ${boxD}px; background-image: url('${textureUrl}'); background-size: cover; border: 1px solid #444; transform: rotateX(-90deg) translateZ(${halfH}px); top: ${halfH - halfD}px;"></div>
+                `;
+            }
+        }
+    }
+
+    [widthInput, heightInput, depthInput, boardWidthInput, boardHeightInput, singleBoardPriceInput, boardCountInput, furnitureTypeElement].forEach(input => {
+        if (input) {
+            input.addEventListener("input", updateFurnitureApp);
+            input.addEventListener("change", updateFurnitureApp);
+        }
+    });
+
+    updateFurnitureApp();
+
+    let isDragging = false;
+    let startX, startY;
+    let rotX = -15, rotY = 35;
+
+    if(box3d) {
+        box3d.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    }
+
+    const sceneContainer = document.querySelector(".scene-container");
+    if(sceneContainer) {
+        sceneContainer.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            sceneContainer.style.cursor = "grabbing";
+        });
+
+        window.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+            rotY += deltaX * 0.6;
+            rotX -= deltaY * 0.6;
+            
+            if(box3d) {
+                box3d.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            }
+            startX = e.clientX;
+            startY = e.clientY;
+        });
+
+        window.addEventListener("mouseup", () => {
+            isDragging = false;
+            if(sceneContainer) sceneContainer.style.cursor = "grab";
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,351 @@
+/* --- 1. ASOSIY SAHIFA VA RESET --- */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    overflow-x: hidden !important;
+}
+
+/* Hero fon bloki - butun sahifani qoplaydi va orqa fon rasmini ko'rsatadi */
+.hero-background {
+    background: url('/static/images/image.png') no-repeat center top !important;
+    background-size: cover !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    position: relative !important;
+    margin-top: 60px !important;
+    
+}
+
+/* --- 3. NAVBAR (YUQORI MENYU) --- */
+.navbar-pro {
+    position: fixed !important;
+    top: 0;
+    width: 100%;
+    background-color: #202d42;
+    border-bottom: 1px solid #334155;
+    z-index: 1000;
+    padding: 14px 0;
+    margin: 0;
+}
+
+.nav-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.nav-logo {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.nav-logo svg { stroke: #94a3b8; }
+.nav-logo span { color: #cbd5e1; }
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+.nav-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.nav-links a:hover,
+.nav-links a.active {
+    color: #ffffff;
+}
+
+.nav-auth {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.btn-login {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #475569;
+    background: #334155;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+    background: #475569;
+    border-color: #64748b;
+}
+
+@keyframes floatIcon {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+    100% { transform: translateY(0px); }
+}
+
+.animated-user-icon {
+    stroke: #cbd5e1;
+    animation: floatIcon 2s ease-in-out infinite;
+}
+
+.btn-register {
+    background: #475569;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-block;
+    border: 1px solid #64748b;
+    transition: all 0.3s ease;
+}
+
+.btn-register:hover {
+    background: #64748b;
+    transform: translateY(-1px);
+}
+
+/* --- 4. GLASS-BOX (SHISHA EFEKTLI QUTILAR) --- */
+.glass-box {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-box:hover {
+    transform: translateY(-6px) scale(1.01);
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 
+                0 0 20px rgba(255, 255, 255, 0.2) !important;
+}
+
+.glass-box::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        0deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: rotate(45deg);
+    transition: 0.7s;
+    opacity: 0;
+}
+
+.glass-box:hover::after {
+    opacity: 1;
+    top: -100%;
+    left: -100%;
+}
+
+.glass-box h1, .glass-box h5, .glass-box p, .glass-box span {
+    color: #fff !important;
+}
+
+.glass-box .text-muted {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.glass-box p {
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9) !important;
+    font-weight: 500;
+}
+
+/* --- 5. FOOTER (TO'Q KO'K) --- */
+.footer-dark {
+    background-color: #0d1b2a !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    position: relative !important;
+    z-index: 999999 !important;
+    clear: both !important;
+    margin-top: 0 !important;
+    box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.8) !important;
+}
+
+.footer-dark a:hover {
+    color: #ffffff !important;
+    text-decoration: underline !important;
+}
+
+/* --- 6. PROFESSIOANAL MODAL OYNA --- */
+.custom-alert-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 99999 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out !important;
+}
+
+.custom-alert-overlay.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.custom-alert-box {
+    background: #ffffff !important;
+    color: #212529 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 20px !important;
+    padding: 35px 30px !important;
+    width: 90% !important;
+    max-width: 400px !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25) !important;
+    text-align: center !important;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.custom-alert-overlay.active .custom-alert-box {
+    transform: scale(1) !important;
+}
+
+.custom-alert-box h4 {
+    color: #73808e !important;
+}
+
+.custom-alert-box p {
+    color: #6c757d !important;
+}
+
+.modal-icon-badge {
+    width: 70px !important;
+    height: 70px !important;
+    background: rgba(220, 53, 69, 0.1) !important;
+    color: #dc3545 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 20px auto !important;
+    font-size: 32px !important;
+}
+
+/* --- 7. BADGE GOLD (OLTIN/BRONZA USLUB) --- */
+.badge-gold {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(255, 215, 0, 0.3)) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 215, 0, 0.4) !important;
+    color: #ffd700 !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.badge-gold:hover {
+    background: rgba(212, 175, 55, 0.35) !important;
+    border-color: rgba(255, 215, 0, 0.8) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(212, 175, 55, 0.3);
+}
+
+/* --- 8. GIF LENTA (MARQUEE) - SHAFFOF SHISHA --- */
+.marquee-container {
+    width: 100% !important;
+    overflow: hidden !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 30px 0 80px 0 !important;
+    margin: 0 !important;
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: scrollMarquee 40s linear infinite;
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+/* --- AYNAN YUQORIDAGI .glass-box USLUBI BILAN BIR XIL --- */
+.marquee-item {
+    width: 650px;  
+    height: 380px; 
+    margin-right: 35px; 
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+    transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+/* Sichqoncha kelganda yuqoridagi qutilardek ko'tarilib porlashi */
+.marquee-item:hover {
+    transform: translateY(-6px) scale(1.01) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 
+                0 0 20px rgba(255, 255, 255, 0.2) !important;
+}
+
+.marquee-item img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    border-radius: 1.4rem !important;
+    display: block;
+    background: transparent !important;
+}
+
+@keyframes scrollMarquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}

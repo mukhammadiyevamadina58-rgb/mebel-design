@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}
+Materiallar va teksturalar
+{% endblock %}
+
+{% block content %}
+<!-- To'g'ridan-to'g'ri shu sahifaning o'zida ishlaydigan dizayn -->
+<style>
+    .color-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+        cursor: pointer !important;
+    }
+    .color-card:hover, .color-card:active {
+        transform: translateY(-6px) !important;
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2) !important;
+    }
+</style>
+
+<div class="container-fluid py-4" style="margin-top: 60px;">
+    <div class="row">
+        <!-- Chap tomon: Materiallar (Kvadrat shaklida) -->
+        <div class="col-lg-8">
+            <h3 class="fw-bold mb-4">Ombordagi materiallar va teksturalar</h3>
+            <div class="row g-3">
+                {% for tex in textures %}
+                    <div class="col-md-3 col-sm-4 col-6">
+                        <!-- color-card klassi qo'shildi -->
+                        <div class="card color-card shadow-sm h-100 border-0 position-relative">
+                            
+                            <!-- 3 nuqtacha dropdown menyu -->
+                            <div class="dropdown position-absolute top-0 end-0 m-2" style="z-index: 10;">
+                                <button class="btn btn-light btn-sm rounded-circle shadow-sm p-1 d-flex align-items-center justify-content-center bg-white opacity-75" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 30px; height: 30px;">
+                                    <i class="bi bi-three-dots-vertical text-dark"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+                                    <li>
+                                        <!-- O'chirish modalini ochish tugmasi -->
+                                        <button type="button" class="dropdown-item py-2 px-3 text-danger small" data-bs-toggle="modal" data-bs-target="#deleteTextureModal{{ tex.id }}">
+                                            <i class="bi bi-trash me-2"></i> O'chirish
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <img src="{{ tex.image.url }}" class="card-img-top" alt="{{ tex.name }}" style="width: 100%; height: 160px; object-fit: cover;">
+                            <div class="card-body p-2 text-center">
+                                <h6 class="card-title m-0 fw-semibold">{{ tex.name }}</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HAR BIR MATERIAL UCHUN O'CHIRISH MODALI -->
+                    <div class="modal fade" id="deleteTextureModal{{ tex.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow rounded-4 p-2">
+                                <div class="modal-body text-center p-4">
+                                    <div class="mb-3">
+                                        <span class="bg-danger-subtle text-danger p-3 rounded-circle d-inline-flex">
+                                            <i class="bi bi-exclamation-triangle fs-3"></i>
+                                        </span>
+                                    </div>
+                                    <h5 class="fw-bold mb-2">Materialni o'chirish</h5>
+                                    <p class="text-muted small mb-4">
+                                        "<strong>{{ tex.name }}</strong>" materialini haqiqatan ham o'chirmoqchimisiz?
+                                    </p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <button type="button" class="btn btn-light px-4 rounded-3 border fw-medium" data-bs-dismiss="modal">Bekor qilish</button>
+                                        <form action="{% url 'delete_material' tex.id %}" method="POST" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger px-4 rounded-3 fw-medium">Ha, o'chirish</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- MODAL TUGADI -->
+
+                {% empty %}
+                    <p class="text-muted">Hozircha materiallar qo'shilmagan.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- O'ng tomon: Material qo'shish formasi -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 p-4 sticky-top" style="top: 80px;">
+                <h4 class="fw-bold mb-3 text-dark">Yangi material qo'shish</h4>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100">Materialni saqlash</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

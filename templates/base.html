@@ -1,0 +1,116 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MebelPro{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <!-- 1. Yuqori panel va 3 ta chiziqcha tugmasi (Qotirilgan) -->
+    <header class="top-navbar shadow-sm" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1030; height: 60px; background: #fff; display: flex; align-items: center; padding: 0 15px;">
+        <button class="toggle-btn border-0 bg-transparent" id="menuToggleBtn">
+            <i class="bi bi-list fs-3"></i>
+        </button>
+        <span class="ms-3 fw-bold text-dark">MebelPro Design</span>
+    </header>
+
+    <!-- 2. QORA PANEL: Sahifa nomi (Yuqori panelning tagida qotirilgan) -->
+    <div class="bg-dark text-white py-2 px-4 shadow-sm w-100 text-center" style="position: fixed; top: 60px; left: 0; z-index: 1020;">
+    <span class="fs-5 fw-semibold">
+        {% block page_title %}Bosh sahifa{% endblock %}
+    </span>
+</div>
+
+    <!-- Orqa fon qorong'ulashtiruvchi parda -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- 3. ASOSIY KONTENT QISMI (Tepadagi ikki paneldan pastdan boshlanishi uchun padding-top beramiz: 60px + 45px = 105px) -->
+    <div class="app-container" style="padding-top: 40px; min-height: 100vh;">
+        <!-- Alohida qilingan sidebarni shu yerga ulaymiz -->
+        {% include 'chap_nav.html' %}
+        
+        <!-- Asosiy Kontent -->
+        <main class="main-content p-4 flex-grow-1" style="width: 100%;">
+            <div class="container-fluid">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {% block content %}
+            <!-- Har bir sahifaning o'z kodi shu yerga tushadi -->
+            {% endblock %}
+        </main>
+    </div>
+
+    <!-- Tizimdan chiqish paytidagi yuklanish oynasi (Zgruska) -->
+    <div id="logoutOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; color: white;">
+        <div class="spinner-border text-light mb-3" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
+        <h5 class="fw-bold">Tizimdan chiqilmoqda...</h5>
+        <p class="text-muted small">Iltimos, kuting</p>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript - Toggle tugmasi mantiqi -->
+    <script>
+        const menuToggleBtn = document.getElementById('menuToggleBtn');
+        const sidebarNav = document.getElementById('sidebarNav');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeBtn = document.getElementById('closeBtn');
+
+        // Sidebar ochish va yopish funksiyalari
+        function openSidebar() {
+            if (sidebarNav) sidebarNav.classList.add('show', 'active');
+            if (sidebarOverlay) sidebarOverlay.classList.add('show', 'active');
+        }
+
+        function closeSidebar() {
+            if (sidebarNav) sidebarNav.classList.remove('show', 'active');
+            if (sidebarOverlay) sidebarOverlay.classList.remove('show', 'active');
+        }
+
+        if (menuToggleBtn) {
+            menuToggleBtn.addEventListener('click', openSidebar);
+        }
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeSidebar);
+        }
+        
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeSidebar);
+        }
+
+        // Chiqish tugmasi va yuklanish oynasi mantiqi
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutOverlay = document.getElementById('logoutOverlay');
+
+        if (logoutBtn && logoutOverlay) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                logoutOverlay.style.display = 'flex';
+                setTimeout(() => {
+                    window.location.href = logoutBtn.href;
+                }, 800);
+            });
+        }
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

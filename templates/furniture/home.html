@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>— MebelPro — </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=1.2">
+</head>
+<br>
+
+    <!-- Yuqori menyu (Navbar) -->
+    <nav class="navbar-pro">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                Mebel<span>Pro</span>
+            </a>
+            <div class="nav-auth">
+    <a href="{% url 'login' %}" class="btn-login">
+        <svg class="animated-user-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        Kirish
+    </a>
+    <a href="{% url 'register' %}" class="btn-register">Ro'yxatdan o'tish</a>
+</div>
+        </div>
+    </nav>
+
+
+    <!-- ASOSIY QISM: Rasm va kartochkalar shu yerda boshlanadi -->
+    <div class="hero-background pt-5 mt-5">
+        
+        <!-- Banner qismi -->
+        <div class="container py-5">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            <div class="p-4 glass-box shadow-lg">
+                <span class="badge badge-gold mb-3 px-3 py-2 rounded-pill">Sizning g'oyangiz — bizning yechimimiz</span>
+                <h1 class="display-5 fw-bold mb-3">O'z mebelingizni o'zingiz 3D formatda loyihalashtiring!</h1>
+                <p class="lead mb-4">Uyingiz yoki ofisingiz uchun mukammal shkaf, oshxona va stol o'lchamlarini kiriting, narxini darhol hisoblang va buyurtma bering.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="p-4 glass-box shadow-lg text-center">
+                <div class="ratio ratio-16x9 rounded-3 overflow-hidden border border-light border-opacity-25">
+                    <img src="{% static 'images/konstruktr.jpg' %}" alt="3D Mebel Dizayn" class="w-100 h-100 object-fit-cover">
+                </div>
+                <p class="mt-3 small mb-0">Zamonaviy dizayn va real vaqtda 3D ko'rinish</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+        <!-- Afzalliklar bo'limi -->
+        <div class="py-4 border-top border-light border-opacity-25 bg-black bg-opacity-25">
+            <div class="container">
+                <div class="row text-center g-4">
+                    <div class="col-md-4">
+                        <div class="p-3 glass-box h-100">
+                            <i class="bi bi-cube fs-1 text-info mb-3"></i>
+                            <h5 class="fw-bold">3D Interaktiv Modellashtirish</h5>
+                            <p class="small mb-0">Mebelingizni har tomondan ko'ring va o'lchamlarini o'zgartiring.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 glass-box h-100">
+                            <i class="bi bi-calculator fs-1 text-success mb-3"></i>
+                            <h5 class="fw-bold">Avtomatik Narx Hisoblash</h5>
+                            <p class="small mb-0">Kvadrat metr va material narxiga qarab xarajatni oldindan bilib oling.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 glass-box h-100">
+                            <i class="bi bi-palette fs-1 text-warning mb-3"></i>
+                            <h5 class="fw-bold">Rang va Tekstura Tanlovi</h5>
+                            <p class="small mb-0">O'zingizga yoqqan MDF ranglarini tanlab loyihaga moslang.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- <-- HERO-BACKGROUND SHU YERDA QAT'IY TUGAYDI! Rasm shu yerda to'xtaydi. -->
+
+
+    
+    <div class="marquee-container">
+        <div class="marquee-track">
+            <div class="marquee-item"><img src="{% static 'gif/1.gif' %}" alt="Reklama 1"></div>
+            <div class="marquee-item"><img src="{% static 'gif/2.gif' %}" alt="Reklama 2"></div>
+            <div class="marquee-item"><img src="{% static 'gif/3.gif' %}" alt="Reklama 3"></div>
+            <div class="marquee-item"><img src="{% static 'gif/4.gif' %}" alt="Reklama 4"></div>
+            <div class="marquee-item"><img src="{% static 'gif/5.gif' %}" alt="Reklama 5"></div>
+            <div class="marquee-item"><img src="{% static 'gif/6.gif' %}" alt="Reklama 6"></div>
+            <div class="marquee-item"><img src="{% static 'gif/7.gif' %}" alt="Reklama 7"></div>
+            
+            <div class="marquee-item"><img src="{% static 'gif/1.gif' %}" alt="Reklama 1"></div>
+            <div class="marquee-item"><img src="{% static 'gif/2.gif' %}" alt="Reklama 2"></div>
+            <div class="marquee-item"><img src="{% static 'gif/3.gif' %}" alt="Reklama 3"></div>
+            <div class="marquee-item"><img src="{% static 'gif/4.gif' %}" alt="Reklama 4"></div>
+            <div class="marquee-item"><img src="{% static 'gif/5.gif' %}" alt="Reklama 5"></div>
+            <div class="marquee-item"><img src="{% static 'gif/6.gif' %}" alt="Reklama 6"></div>
+            <div class="marquee-item"><img src="{% static 'gif/7.gif' %}" alt="Reklama 7"></div>
+        </div>
+    </div>
+
+
+    <br>    </br>
+
+    <!-- Futer (Eng pastda, alohida va mukammal holatda) -->
+    <footer class="footer-dark text-white pt-5 pb-3 border-top border-secondary">
+        <div class="container">
+            <div class="row justify-content-between g-4">
+                <div class="col-lg-4 col-md-5">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-box-seam me-2 text-primary"></i>MebelPro
+                    </h5>
+                    <p class="text-white-50 small">
+                        Uyingiz va ofisingiz uchun zamonaviy 3D loyihalar asosida sifatli mebellar tayyorlash va avtomatik narx hisoblash tizimi.
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-md-3">
+                    <h6 class="fw-bold mb-3 text-uppercase small">Bog'lanish</h6>
+                    <ul class="list-unstyled small text-white-50">
+                        <li class="mb-2"><i class="bi bi-telephone-fill text-primary me-2"></i> +998 (90) 123-45-67</li>
+                        <li class="mb-2"><i class="bi bi-telegram text-info me-2"></i> @mebelpro_admin</li>
+                        <li class="mb-2"><i class="bi bi-instagram text-danger me-2"></i> @mebelpro_uz</li>
+                        <li class="mb-2"><i class="bi bi-facebook text-primary me-2"></i> MebelPro Official</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-4">
+                    <h6 class="fw-bold mb-3 text-uppercase small">Ish vaqti va Manzil</h6>
+                    <p class="text-white-50 small mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Toshkent sh., Chilonzor tumani</p>
+                    <p class="text-white-50 small"><i class="bi bi-clock-fill text-warning me-1"></i> Dushanba — Shanba: 09:00 - 18:00</p>
+                </div>
+            </div>
+
+            <hr class="border-secondary my-4 opacity-25">
+            <div class="text-center text-white-50 small">
+                &copy; 2026 MebelPro. Barcha huquqlar himoyalangan.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function checkRegistration() {
+            alert("Loyihani boshlash uchun iltimos, avval ro'yxatdan o'ting!");
+            window.location.href = "{% url 'register' %}";
+        }
+    </script>
+
+</body>
+</html>

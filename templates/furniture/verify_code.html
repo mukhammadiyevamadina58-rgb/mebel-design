@@ -1,0 +1,21 @@
+<div class="container mt-5">
+    <h2>Telegram orqali tasdiqlash</h2>
+    <p><b>{{ phone }}</b> raqamiga tasdiqlash kodi yuborildi.</p>
+    
+    <div class="alert alert-info">
+        Agar kod kelmagan bo'lsa, Telegram botimizga kirib <b>"📞 Telefon raqamni ulashish"</b> tugmasini bosing:
+        <br>
+        <a href="https://t.me/{{ bot_username }}" target="_blank" class="btn btn-sm btn-primary mt-2">
+            Telegram Botga o'tish
+        </a>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="code" class="form-label">6 xonali tasdiqlash kodini kiriting:</label>
+            <input type="text" name="code" class="form-control" maxlength="6" required placeholder="123456">
+        </div>
+        <button type="submit" class="btn btn-success">Tasdiqlash va Kirish</button>
+    </form>
+</div>
