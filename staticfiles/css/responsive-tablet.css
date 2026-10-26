@@ -1,0 +1,68 @@
+/* =====================================================================
+   responsive-tablet.css — PLANSHET uchun
+   Ekran: 991px va undan kichik. Telefonda ham ishlaydi, lekin
+   responsive-phone.css keyin ulangani uchun telefon qoidalari ustun turadi.
+   ===================================================================== */
+
+@media (max-width: 991.98px) {
+
+    /* ---- Bosh sahifa (home.html) ----
+       fon rasmi tik (896x1195): 100% kenglikda tor ekranda pastida bo'sh joy qoladi -> cover */
+    .hero-background {
+        background-size: cover !important;
+        min-height: auto !important;
+        padding-bottom: 60px !important;
+    }
+    .nav-container { padding: 0 16px; }
+    .hero-background .glass-box { padding: 1.25rem !important; }
+    .hero-background h1 { font-size: 2rem; }
+    .hero-background .lead { font-size: 1.05rem; }
+    .modern-img-box-large { height: 280px; }
+    .marquee-item { width: 440px; height: 260px; margin-right: 24px; }
+
+    /* ---- Mijoz katalogi navbari (catalog_base.html) ----
+       catalog.css da .navbar-search { width: 240px !important } bor, shuning uchun !important */
+    .custom-navbar .navbar-search { width: 100% !important; margin: .5rem 0 !important; }
+    .custom-navbar .navbar-nav .nav-link { padding: .6rem .8rem !important; }
+
+    /* ---- 3D dizayner (create_project.html, form.html): forma va 3D oyna ketma-ket ---- */
+    .row > .col-md-5.d-flex,
+    .row > .col-md-7.d-flex.flex-column,
+    .row > .col-lg-5.col-md-6.d-flex,
+    .row > .col-lg-7.col-md-6.d-flex.flex-column {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    /* ---- O'ng tomondagi forma / sharhlar paneli (colors, materials, craftsman_project_detail):
+           kichik ekranda yopishmasin ---- */
+    .card.sticky-top {
+        position: static !important;
+        top: auto !important;
+    }
+}
+
+/* ---- Faqat planshet (768px - 991px): kartochkalar ro'yxatida 3 emas, 2 ustun
+       (g-4 qatori; sarlavha qatori g-3 bo'lgani uchun unga tegmaydi) ---- */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .row.g-4 > .col-md-4 { width: 50%; }
+}
+
+/* ---- Sensorli qurilmalar (planshet, telefon): sichqoncha "hover" effektlari
+       barmoq bosganda yopishib qolmasin ---- */
+@media (hover: none) {
+    .card:hover, .custom-card:hover, .ui-card:hover, .project-card:hover,
+    .color-card:hover, .material-card:hover, .texture-card:hover,
+    .modern-card-large:hover, .glass-box:hover, .marquee-item:hover,
+    .user-greeting:hover, .favorite-toggle-btn:hover, .like-btn-outline:hover,
+    .badge-gold:hover, .btn-register:hover, .btn-primary:hover,
+    .btn-outline-primary:hover, #sidebarNav .sidebar-menu a:hover {
+        transform: none !important;
+    }
+    .card:hover img, .card:hover .card-img-top { transform: none !important; }
+}
+
+/* ---- Tik (portrait) ekranlar, masalan katta planshet: fon rasmi bo'shliq qoldirmasin ---- */
+@media (orientation: portrait) {
+    .hero-background { background-size: cover !important; }
+}

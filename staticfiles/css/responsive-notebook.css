@@ -1,0 +1,33 @@
+/* =====================================================================
+   responsive-notebook.css — NOTEBOOK (noutbuk) uchun
+   Ekran: 992px - 1399px. Barcha ekranlarga tegishli umumiy qoidalar ham shu yerda.
+   Ulash tartibi: notebook -> tablet -> phone (keyingisi oldingisini bosadi)
+   ===================================================================== */
+
+/* ---------- Umumiy (barcha ekranlar) ---------- */
+/* gorizontal siljishni oldini olish; hidden emas, clip: hidden sticky navbarni buzadi */
+body { max-width: 100%; overflow-x: clip; }
+/* mebelchi paneli: flex ichidagi kontent kengayib ketmasin */
+.main-content { min-width: 0; }
+/* bosh sahifada fon rasmi yetmay qolsa, oq bo'sh joy emas, to'q fon ko'rinsin */
+.hero-background { background-color: #121824 !important; }
+
+/* ---------- Katta ekran (>= 992px) ----------
+   yopishib turgan forma paneli yuqori panel (105px) ostida qolmasin */
+@media (min-width: 992px) {
+    .card.sticky-top[style*="top: 80px"] { top: 120px !important; }
+}
+
+/* ---------- Noutbuk (992px - 1399px) ---------- */
+@media (min-width: 992px) and (max-width: 1399.98px) {
+    .nav-container { gap: 1rem; padding: 0 24px; }
+    .hero-background h1 { font-size: 2.6rem; }
+    .marquee-item { width: 560px; height: 330px; }
+}
+
+/* ---------- Kichik noutbuk (992px - 1199px) ---------- */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .nav-container { gap: .75rem; padding: 0 20px; }
+    .hero-background h1 { font-size: 2.2rem; }
+    .marquee-item { width: 500px; height: 300px; }
+}

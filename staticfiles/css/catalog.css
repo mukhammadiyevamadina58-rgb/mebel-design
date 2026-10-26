@@ -1,0 +1,420 @@
+/* --- 1. SAHIFA FONI VA UMUMIY STILLAR --- */
+html, 
+body, 
+body.bg-light {
+    background-color: #96aad567 !important; /* Toza va zamonaviy matoviy seriy fon */
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+nav.navbar,
+.custom-navbar {
+    margin-bottom: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+main {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    background-color: #4b566c38 !important; /* Matoviy seriy fon */
+    min-height: 100vh;
+}
+
+/* Container tepasidagi ortiqcha oq/bo'sh joylarni biriktirish */
+main > .container,
+main .container.my-5 {
+    margin-top: 0 !important;
+    padding-top: 2rem !important;
+}
+
+/* Sarlavhalar matoviy fonda yaqqol ko'rinishi uchun */
+main h2, 
+main .text-dark {
+    color: #ffffff !important;
+}
+
+main .text-muted {
+    color: #a1a1aa !important;
+}
+
+/* --- 2. ZAMONAVIY KARTOCHKALAR --- */
+.card {
+    background: #ffffff !important;
+    border: 1px solid #eaedf1 !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Sichqoncha borganda yumshoq ko'tarilish va silliq soya */
+.card:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12) !important;
+    border-color: #e0e4ec !important;
+}
+
+/* Kartochka ichidagi rasm va bo'sh blok foni */
+.card .bg-light,
+.card .bg-secondary-subtle {
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid #f0f2f5 !important;
+}
+
+.card .bg-secondary-subtle i,
+.card .bg-light i {
+    color: #adb5bd !important;
+}
+
+/* Rasm kattalashishi */
+.card img, 
+.card-img-top {
+    transition: transform 0.5s ease !important;
+}
+
+.card:hover img, 
+.card:hover .card-img-top {
+    transform: scale(1.05) !important;
+}
+
+/* Oxirgi fikrlar bloki */
+.card .card-body .bg-light,
+.card .p-3.bg-light {
+    background: #f8f9fa !important;
+    border-radius: 12px !important;
+    border: 1px solid #e9ecef !important;
+}
+
+.card .card-body .bg-light span,
+.card .card-body .bg-light div,
+.card .card-body .bg-light p {
+    color: #495057 !important;
+}
+
+/* --- 3. QORA GLASSMORPHISM NAVBAR --- */
+.custom-navbar {
+    background: rgba(18, 18, 18, 0.96) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.navbar-brand {
+    font-size: 1.4rem !important;
+    color: #ffc107 !important;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    padding: 0.5rem 0.8rem !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    margin: 0 2px !important;
+}
+
+.navbar-nav .nav-link:hover, 
+.navbar-nav .nav-link.active {
+    color: #ffc107 !important;
+    background: rgba(255, 193, 7, 0.15) !important;
+}
+
+/* Qidiruv paneli */
+.navbar-search {
+    width: 240px !important;
+}
+
+.search-input-group {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.search-input-group:focus-within {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: #ffc107 !important;
+}
+
+.search-input-group .form-control {
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 0.85rem !important;
+    padding: 0.35rem 0.75rem !important;
+    box-shadow: none !important;
+}
+
+.search-input-group .form-control::placeholder {
+    color: #a1a1aa !important;
+}
+
+.search-input-group .btn-search {
+    background: transparent !important;
+    border: none !important;
+    color: #ffc107 !important;
+    padding: 0.35rem 0.75rem !important;
+}
+
+/* Odamcha va greeting badge */
+.user-greeting {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    padding: 6px 16px !important;
+    border-radius: 50px !important;
+    color: #e5e7eb !important;
+    font-size: 0.88rem !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.user-greeting:hover {
+    background: rgba(255, 193, 7, 0.18) !important;
+    border-color: #ffc107 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.45) !important;
+}
+
+.user-greeting strong {
+    color: #ffc107 !important;
+}
+
+/* Sevimlilar (Yurakcha) */
+.favorite-btn {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 71, 87, 0.3) !important;
+    color: #ff4757 !important;
+    width: 38px !important;
+    height: 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+}
+
+.favorite-btn:hover {
+    background: #ff4757 !important;
+    color: #ffffff !important;
+    transform: scale(1.08) !important;
+}
+
+/* Chiqish tugmasi */
+.btn-logout {
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #f3f4f6 !important;
+    font-size: 0.8rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-logout:hover {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: #ffffff !important;
+}
+
+/* --- KLIKABELNOST I STILI SERDTSA --- */
+.favorite-toggle-btn {
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+    transition: transform 0.2s ease, background-color 0.2s ease !important;
+}
+
+.favorite-toggle-btn:hover {
+    transform: scale(1.15) !important;
+    background-color: #fff0f1 !important;
+}
+
+.favorite-toggle-btn i {
+    color: #dc3545 !important;
+}
+
+/* --- BATAFSIL KO'RISH SAHIFASI (PROJECT DETAIL) UCHUN QO'SHIMCHA STILLAR --- */
+.custom-detail-card {
+    background: #ffffff !important;
+    border: 1px solid #eaedf1 !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+    overflow: hidden !important;
+}
+
+.custom-detail-card h2,
+.custom-detail-card h5,
+.custom-detail-card strong,
+.custom-detail-card p,
+.custom-detail-card span,
+.custom-detail-card label {
+    color: #212529 !important;
+}
+
+.custom-detail-card .text-muted {
+    color: #6c757d !important;
+}
+
+.img-container {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    background: #f8f9fa !important;
+    min-height: 380px !important;
+    max-height: 480px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.img-container img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transition: transform 0.5s ease !important;
+}
+
+.img-container img:hover {
+    transform: scale(1.02) !important;
+}
+
+.price-box {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%) !important;
+    border-radius: 16px !important;
+    padding: 20px 25px !important;
+    border: 1px solid #a5d6a7 !important;
+}
+
+.price-box span {
+    color: #1b5e20 !important;
+    font-weight: 700 !important;
+}
+
+.btn-back {
+    background-color: #ffffff !important;
+    color: #495057 !important;
+    border: 1px solid #e0e4ec !important;
+    border-radius: 50rem !important;
+    padding: 8px 20px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.btn-back:hover {
+    background-color: #212529 !important;
+    color: #ffffff !important;
+    border-color: #212529 !important;
+    transform: translateY(-2px);
+}
+
+.star-rating-icons i {
+    cursor: pointer !important;
+    transition: transform 0.2s ease !important;
+}
+
+.star-rating-icons i:hover {
+    transform: scale(1.2) !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================
+   BATAFSIL KO'RISH (PROJECT DETAIL) MAXSUS STILLARI
+========================================== */
+
+/* 1. Detail sahifasi uchun kartochka ko'rinishini yaxshilash */
+main .card.border-0.shadow-sm.rounded-4 {
+    border: 1px solid #eaedf1 !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* 2. Rasm qutisi va hover effekti */
+main .bg-light.rounded-4.overflow-hidden {
+    background-color: #f8f9fa !important;
+    border: 1px solid #f0f2f5 !important;
+}
+
+main .bg-light.rounded-4.overflow-hidden img {
+    transition: transform 0.4s ease !important;
+}
+
+main .bg-light.rounded-4.overflow-hidden:hover img {
+    transform: scale(1.03) !important;
+}
+
+/* 3. Narx bloki - Premium Yashil Gradient */
+main div[style*="linear-gradient"] {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%) !important;
+    border: 1px solid #a5d6a7 !important;
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.08) !important;
+}
+
+/* 4. Orqaga qaytish tugmasi (Hover effekti) */
+main a.btn-light.border.rounded-pill {
+    background-color: #ffffff !important;
+    border-color: #dee2e6 !important;
+    color: #333333 !important;
+    transition: all 0.25s ease !important;
+}
+
+main a.btn-light.border.rounded-pill:hover {
+    background-color: #212529 !important;
+    color: #ffffff !important;
+    border-color: #212529 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 5. Sharh qoldirish formasi (Input va Textarea) */
+main textarea.form-control {
+    background-color: #f8f9fa !important;
+    border: 1px solid #e9ecef !important;
+    color: #212529 !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+main textarea.form-control:focus {
+    background-color: #ffffff !important;
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.18) !important;
+}
+
+/* 6. Sharh yuborish tugmasi */
+main button.btn-dark.w-100.rounded-pill {
+    background: linear-gradient(135deg, #212529 0%, #343a40 100%) !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+}
+
+main button.btn-dark.w-100.rounded-pill:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2) !important;
+}

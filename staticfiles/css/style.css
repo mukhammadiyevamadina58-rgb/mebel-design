@@ -1,0 +1,487 @@
+/* =========================================================
+   MEBELPRO DESIGN - PREMIUM WARM WOOD & CREAM COMPLETE STYLE
+   ========================================================= */
+
+/* 1. UMUMIY SAHIFA FON VA SHRIFTLAR */
+body, 
+.main-content, 
+main {
+    background-color: #f7f5f2 !important;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+    color: #2c2420 !important;
+}
+
+/* Asosiy konteyner joylashuvi */
+.app-container {
+    padding-top: 105px !important;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Asosiy navbar sarlavhasi (MebelPro Design va ikonka o'rab turgan blok) */
+header.top-navbar .fw-bold,
+header.top-navbar span {
+    display: inline-flex !important;
+    align-items: center !important;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Sichqoncha olib borilganda so'z va ikonka birgalikda oldinga chiqadi va nur sochadi */
+header.top-navbar .fw-bold:hover,
+header.top-navbar span:hover {
+    transform: translateY(-2px) scale(1.05) !important; /* Yengil oldinga siljiydi va kattalashadi */
+    color: #3b281e !important; /* Sal to'qroq, jozibali yog'och rangi */
+    text-shadow: 0 0 12px rgba(92, 64, 51, 0.4), 
+                0 0 25px rgba(181, 155, 132, 0.6) !important; /* Yorug'lik nurchasi */
+}
+
+/* Mishka borganda yonidagi ikonka ham jonlanib, biroz qimirlaydi */
+header.top-navbar .fw-bold:hover .navbar-furniture-icon,
+header.top-navbar span:hover .navbar-furniture-icon {
+    transform: scale(1.2) rotate(8deg) !important;
+    color: #5c4033 !important;
+    text-shadow: 0 0 10px rgba(140, 109, 83, 0.8) !important;
+}
+
+
+
+
+/* 2. YUQORI PANELLAR (TOPBAR & STRIP) */
+header.top-navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 60px !important;
+    z-index: 1030 !important;
+    /* Oddiy oq emas, balki boshqacha, yorqinroq va iliq sutsimon-krem rang */
+    background: linear-gradient(135deg, #fcf4e2 0%, #d5ccbb) !important;
+    border-bottom: 1px solid #e2dac9 !important;
+    box-shadow: 0 4px 20px rgba(44, 36, 32, 0.06) !important;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    transition: all 0.3s ease !important;
+}
+
+/* Navbar ichidagi 3 ta chiziqcha tugmasi yangi fonga moslashtirildi */
+#menuToggleBtn {
+    color: #5c4033 !important;
+    background-color: rgba(92, 64, 51, 0.06) !important;
+    border-radius: 12px !important;
+    padding: 6px 12px !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#menuToggleBtn:hover {
+    background-color: rgba(92, 64, 51, 0.15) !important;
+    color: #2c2420 !important;
+    transform: scale(1.08) !important;
+    box-shadow: 0 0 15px rgba(181, 155, 132, 0.4) !important;
+}
+
+header.top-navbar .fw-bold,
+header.top-navbar span {
+    color: #5c4033 !important;
+    letter-spacing: 0.6px !important;
+    text-shadow: 0 2px 4px rgba(92, 64, 51, 0.1) !important;
+}
+
+/* Navbar yonidagi mebelga mos doimiy qimirlaydigan ikonka animatsiyasi */
+.navbar-furniture-icon {
+    display: inline-block;
+    margin-left: 8px;
+    color: #5c4033 !important;
+    animation: furnitureMove 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes furnitureMove {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+        text-shadow: 0 0 5px rgba(92, 64, 51, 0.2);
+    }
+    100% {
+        transform: translateY(-3px) rotate(5deg);
+        text-shadow: 0 0 12px rgba(140, 109, 83, 0.6);
+    }
+}
+
+/* Sarlavha stripi (Page header strip) */
+.page-header-strip, 
+div[style*="top: 60px"] {
+    position: fixed !important;
+    top: 60px !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 45px !important;
+    z-index: 1020 !important;
+    background: linear-gradient(135deg, #2c2420 0%, #1e1815) !important;
+    border-bottom: 2px solid #8c6d53 !important;
+    box-shadow: 0 6px 20px rgba(44, 36, 32, 0.2) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-header-strip span, 
+div[style*="top: 60px"] span {
+    color: #f4e8c1 !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    text-shadow: 0 0 10px rgba(244, 232, 193, 0.6), 
+                0 0 22px rgba(140, 109, 83, 0.8) !important;
+    animation: textGlowPulse 3s infinite alternate !important;
+}
+
+@keyframes textGlowPulse {
+    0% {
+        text-shadow: 0 0 8px rgba(244, 232, 193, 0.5), 0 0 15px rgba(140, 109, 83, 0.6);
+    }
+    100% {
+        text-shadow: 0 0 16px rgba(244, 232, 193, 0.95), 0 0 28px rgba(181, 155, 132, 1);
+    }
+}
+
+/* 3. CHAP NAVBAR (SIDEBAR) - YORUG'LIK VA QIMIRLAYDIGAN IKONKALAR */
+#sidebarNav {
+    position: fixed !important;
+    top: 0 !important;
+    left: -280px !important;
+    width: 280px !important;
+    height: 100vh !important;
+    background-color: #2c2420 !important;
+    border-right: 1px solid #3d322c !important;
+    transition: left 0.3s ease-in-out !important;
+    z-index: 1050 !important;
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+#sidebarNav.show, 
+#sidebarNav.active {
+    left: 0 !important;
+}
+
+#sidebarNav .sidebar-brand {
+    border-color: #3d322c !important;
+}
+
+#sidebarNav .sidebar-brand i.bi-door-open {
+    color: #f4e8c1 !important;
+    text-shadow: 0 0 10px rgba(244, 232, 193, 0.5) !important;
+}
+
+#sidebarNav .sidebar-menu a {
+    color: #f4e8c1 !important;
+    text-shadow: 0 0 8px rgba(244, 232, 193, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: flex;
+    align-items: center;
+}
+
+#sidebarNav .sidebar-menu a:hover {
+    background-color: rgba(181, 155, 132, 0.25) !important;
+    color: #ffffff !important;
+    text-shadow: 0 0 12px rgba(255, 245, 215, 0.9), 
+                0 0 20px rgba(181, 155, 132, 0.8) !important;
+    transform: translateX(6px) !important;
+}
+
+#sidebarNav .sidebar-menu a i {
+    transition: transform 0.3s ease, color 0.3s ease !important;
+    display: inline-block;
+}
+
+#sidebarNav .sidebar-menu a:hover i {
+    transform: scale(1.2) rotate(5deg) !important;
+    color: #f4e8c1 !important;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1035;
+}
+
+.sidebar-overlay.show, 
+.sidebar-overlay.active {
+    display: block !important;
+}
+
+/* 4. KARTOCHKALAR ORQA FONI (SAHIFA FONIGA MOSLASHTIRILGAN) */
+.card, 
+.custom-card, 
+.ui-card, 
+.project-card, 
+.color-card, 
+.material-card {
+    background-color: #f7f5f2 !important;
+    border-radius: 18px !important;
+    border: 1px solid #e7e2dc !important;
+    box-shadow: 0 8px 24px rgba(44, 36, 32, 0.05) !important;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                box-shadow 0.35s ease, 
+                border-color 0.35s ease !important;
+    overflow: hidden;
+}
+
+.card:hover, 
+.custom-card:hover, 
+.ui-card:hover, 
+.project-card:hover, 
+.color-card:hover, 
+.material-card:hover {
+    transform: translateY(-8px) scale(1.01) !important;
+    border-color: #b59b84 !important;
+    box-shadow: 0 20px 35px rgba(92, 64, 51, 0.15), 
+                0 0 20px rgba(181, 155, 132, 0.25) !important;
+}
+
+.project-card .d-flex.justify-content-between.align-items-start {
+    background-color: #2c2420 !important;
+    margin: -1.5rem -1.5rem 1.2rem -1.5rem !important;
+    padding: 1.2rem 1.5rem !important;
+    border-bottom: 2px solid #8c6d53 !important;
+}
+
+/* 5. INPUT VA MAYDONCHALAR */
+input[type="text"], 
+input[type="number"], 
+input[type="email"], 
+input[type="password"], 
+input[type="file"],
+select, 
+textarea, 
+.form-control, 
+.custom-input,
+.form-control-custom {
+    background-color: #ffffff !important;
+    border: 1px solid #d4c5b9 !important;
+    border-radius: 12px !important;
+    padding: 10px 14px !important;
+    color: #2c2420 !important;
+    font-weight: 500 !important;
+    transition: all 0.25s ease-in-out !important;
+}
+
+input:focus, 
+select:focus, 
+textarea:focus, 
+.form-control:focus, 
+.custom-input:focus,
+.form-control-custom:focus {
+    background-color: #ffffff !important;
+    border-color: #8c6d53 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 4px rgba(140, 109, 83, 0.25) !important;
+}
+
+/* 6. TUGMALAR */
+.btn-primary, 
+button[type="submit"],
+a.btn-primary {
+    background-color: #5c4033 !important;
+    border-color: #5c4033 !important;
+    color: #ffffff !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    padding: 9px 20px !important;
+    box-shadow: 0 4px 12px rgba(92, 64, 51, 0.2) !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.btn-primary:hover, 
+button[type="submit"]:hover,
+a.btn-primary:hover {
+    background-color: #4a3328 !important;
+    border-color: #4a3328 !important;
+    box-shadow: 0 6px 18px rgba(92, 64, 51, 0.35) !important;
+    transform: translateY(-2px) !important;
+}
+
+.btn-outline-primary {
+    border-color: #5c4033 !important;
+    color: #5c4033 !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: #5c4033 !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 16px rgba(92, 64, 51, 0.3) !important;
+    transform: translateY(-2px) !important;
+}
+
+#logoutBtn {
+    color: #f4e8c1 !important;
+    background-color: rgba(92, 64, 51, 0.4) !important;
+    border: 1px solid rgba(181, 155, 132, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 0 10px rgba(181, 155, 132, 0.15) !important;
+    border-radius: 8px !important;
+    padding: 6px 12px;
+}
+
+#logoutBtn:hover {
+    background-color: rgba(140, 109, 83, 0.5) !important;
+    color: #ffffff !important;
+    border-color: #b59b84 !important;
+    box-shadow: 0 0 18px rgba(244, 232, 193, 0.4), 
+                0 0 8px rgba(181, 155, 132, 0.6) !important;
+}
+
+/* 7. SARLAVHALAR */
+h1, h2, h3, h4, h5, h6, 
+.text-primary, 
+h3.text-primary, 
+h4.text-primary {
+    color: #5c4033 !important;
+}
+
+.texture-card {
+    border-radius: 12px !important;
+    transition: all 0.2s ease !important;
+    background-color: #ffffff !important;
+}
+
+.texture-card:hover {
+    transform: scale(1.04) !important;
+    border-color: #8c6d53 !important;
+    box-shadow: 0 4px 12px rgba(140, 109, 83, 0.25) !important;
+}
+
+.modal-content {
+    background-color: #ffffff !important;
+    border-radius: 20px !important;
+    border: 1px solid #e7e2dc !important;
+    box-shadow: 0 20px 40px rgba(44, 36, 32, 0.12) !important;
+}
+
+
+.texture-card, 
+.color-card, 
+.material-card {
+    background-color: #f2eee9 !important; /* Приглушённый, комфортный для глаз цвет */
+    border: 1px solid #e2dad2 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 15px rgba(44, 36, 32, 0.04) !important;
+    transition: all 0.25s ease !important;
+}
+
+/* Эффект при наведении мышкой */
+.texture-card:hover, 
+.color-card:hover, 
+.material-card:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+    border-color: #b59b84 !important;
+    background-color: #ede7e0 !important; /* Чуть более глубокий мягкий оттенок при наведении */
+    box-shadow: 0 10px 25px rgba(92, 64, 51, 0.12) !important;
+}
+
+.custom-card {
+    background: rgba(255, 255, 255, 0.75) !important; /* Shaffof oq fon */
+    backdrop-filter: blur(12px) !important;            /* Orqa fonni xiralashtirish (shisha effekti) */
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important; /* Yaltiroq nozik chegara */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08) !important; /* Yumshoq 3D soya */
+    border-radius: 16px !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Telegram Verification Page Styles --- */
+.auth-body {
+    background-color: #f4f6f9 !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.auth-container {
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 20px !important;
+}
+
+.auth-card {
+    max-width: 430px !important;
+    width: 100% !important;
+    border-radius: 20px !important;
+    background: #ffffff !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+    padding: 35px 25px !important;
+    border: none !important;
+}
+
+.tg-badge {
+    width: 70px !important;
+    height: 70px !important;
+    border-radius: 50% !important;
+    background: #e7f3fd !important;
+    color: #229ed9 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 2.2rem !important;
+    margin-bottom: 15px !important;
+}
+
+.code-input {
+    letter-spacing: 0.35em !important;
+    text-align: center !important;
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+    height: 60px !important;
+    border-radius: 12px !important;
+    border: 2px solid #dee2e6 !important;
+}
+
+.code-input:focus {
+    border-color: #0d6efd !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15) !important;
+}
+
+.code-input::placeholder {
+    letter-spacing: 0.35em !important;
+    font-weight: 400 !important;
+    color: #c3c9d3 !important;
+}
+
+

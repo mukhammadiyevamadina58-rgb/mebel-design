@@ -1,0 +1,82 @@
+/* =====================================================================
+   responsive-phone.css — TELEFON uchun
+   Ekran: 767px va undan kichik. Oxirgi ulanadi, shuning uchun
+   planshet va noutbuk qoidalarini kerak joyida bosib o'tadi.
+   ===================================================================== */
+
+@media (max-width: 767.98px) {
+
+    /* ---- Bosh sahifa navbari (bir qatorga sig'adi) ---- */
+    .navbar-pro { padding: 10px 0 !important; }
+    .nav-container { padding: 0 12px; gap: .5rem; }
+    .nav-logo { font-size: 18px; gap: 6px; }
+    .nav-logo svg { width: 20px; height: 20px; }
+    .nav-auth { gap: .4rem; }
+    .btn-login, .btn-register { padding: 6px 10px; font-size: 12.5px; white-space: nowrap; }
+    .navbar-pro .dropdown .btn { padding: 4px 10px !important; font-size: 13px; }
+
+    /* fixed navbar balandligi kamaygani uchun fon bloki yuqoriroq boshlanadi */
+    .hero-background { margin-top: 70px !important; }
+
+    /* ---- Bosh sahifa kontenti ---- */
+    .hero-background h1 { font-size: 1.6rem; }
+    .hero-background .lead { font-size: 1rem; }
+    .glass-box { border-radius: 1rem; }
+    .modern-card-large { padding: 12px; border-radius: 20px; }
+    .modern-img-box-large { height: 240px; }
+    .product-title-large { font-size: 1.05rem; }
+    .product-price-large { font-size: 1rem; }
+
+    /* GIF lenta: 650x380 telefon ekraniga sig'maydi */
+    .marquee-container { padding: 16px 0 24px 0 !important; }
+    .marquee-item { width: 280px; height: 180px; margin-right: 16px; border-radius: 1rem !important; }
+
+    .container-fluid > .d-flex.justify-content-between { flex-wrap: wrap; gap: .75rem; }
+    .footer-dark { text-align: center; }
+    .footer-dark .list-unstyled { padding-left: 0; }
+
+    /* ---- Mebelchi paneli ---- */
+    .main-content.p-4 { padding: .5rem !important; }
+    .page-header-strip { padding-left: .5rem !important; padding-right: .5rem !important; }
+    .page-header-strip span {
+        font-size: 1rem !important;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+    }
+
+    /* ---- 3D dizayner (create_project.html, form.html) ---- */
+    #threejs-container { min-height: 300px !important; }
+    .card[style*="min-height: 440px"] { min-height: 340px !important; padding: .75rem !important; }
+
+    /* ---- Mijoz loyiha sahifasi: slayder ---- */
+    #projectCarousel .carousel-item img { height: 260px !important; }
+
+    /* ---- 3D oyna tagidagi ma'lumot "tabletka"si: uzun matn telefonda sig'maydi ---- */
+    #dimension-info.rounded-pill {
+        border-radius: 1rem !important;
+        max-width: calc(100% - 1rem);
+        white-space: normal;
+        text-align: center;
+    }
+    #dimension-info .small { font-size: .72rem !important; }
+
+    /* ---- 3D oyna barmoq bilan: vertikal surish sahifani skroll qilsin
+           (aks holda 3D oyna sahifani "ushlab" qoladi). Gorizontal surish va
+           ikki barmoq bilan yaqinlashtirish 3D modelni boshqaradi ---- */
+    #threejs-container canvas { touch-action: pan-y !important; }
+}
+
+/* ---- Kichik telefon (575px va kichik) ---- */
+@media (max-width: 575.98px) {
+    /* navbar ikki qatorga o'tadi: 1) logo + til, 2) Kirish / Ro'yxatdan o'tish */
+    .nav-container { flex-wrap: wrap; row-gap: .5rem; }
+    .nav-auth { order: 3; flex: 1 1 100%; justify-content: space-between; }
+    .btn-login, .btn-register { flex: 1; justify-content: center; text-align: center; }
+    .hero-background { margin-top: 120px !important; }
+
+    .hero-background .glass-box { padding: 1rem !important; }
+    .modern-img-box-large { height: 200px; }
+    #projectCarousel .carousel-item img { height: 220px !important; }
+
+    /* mijoz katalogi: loyiha rasmi balandligi */
+    .card [style*="height: 300px"] { height: 220px !important; }
+}
