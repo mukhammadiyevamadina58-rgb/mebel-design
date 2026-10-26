@@ -3,16 +3,18 @@ from django.db import models
 
 class FurnitureProject(models.Model):
     FURNITURE_TYPES = [
-        ('shkaf', 'Shkaf'),
-        ('oshxona', 'Oshxona'),
-        ('stol', 'Stol'),
-        ('yotoqxona', 'Yotoqxona'),
+        ('Shkaf', 'Shkaf'),
+        ('Stol', 'Stol'),
+        ('Oshxona mebeli', 'Oshxona mebeli'),
+        ('Krovat', 'Krovat'),
+        ('Komod', 'Komod'),
+        ('Tumbochka', 'Tumbochka'),
     ]
-
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='projects'
     )
     title = models.CharField(max_length=200, default='Yangi mebel loyihasi')
+    favorites = models.ManyToManyField(User, related_name='favorite_projects', blank=True, verbose_name="Sevimlilar")
     furniture_type = models.CharField(
         max_length=50, choices=FURNITURE_TYPES, default='shkaf'
     )
@@ -91,12 +93,25 @@ class UserProfile(models.Model):
     
     
 class MaterialTexture(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Material yoki tekstura nomi")
+    image = models.ImageField(upload_to='textures/', verbose_name="Tekstura rasmi")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+    
+    
+class Material(models.Model):
     name = models.CharField(max_length=100, verbose_name="Material nomi")
     image = models.ImageField(upload_to='textures/', verbose_name="Tekstura rasmi")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+
+
+
+
 
 
 class MdfColor(models.Model):
@@ -117,3 +132,24 @@ class ProjectReview(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.project.title} ({self.rating} yulduz)"
+    
+class ProjectImage(models.Model):
+    project = models.ForeignKey(FurnitureProject, on_delete=models.CASCADE, related_name='additional_images')
+    image = models.ImageField(upload_to='projects/real_results/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.project.title or 'Loyiha'}"
+    
+class Project(models.Model):
+    title = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='projects/')    
+    
+    
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Foydalanuvchi")
+    comment = models.TextField(verbose_name="Sharh / Fikr")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Qo'shilgan sana")
+
+    def __str__(self):
+        return f"{self.user.username} - Sharh"

@@ -21,9 +21,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', views.maker_login_view, name='maker_login'),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('', views.home_view, name='home'),  # <--- login_view o'rniga home_view yoziladi
     path('furniture/', include('furniture.urls')),
+    path('project/<int:pk>/favorite/', views.toggle_favorite_view, name='toggle_favorite'),
+    path('client/favorites/', views.favorite_projects_view, name='favorite_projects'),
 ]
 
 if settings.DEBUG:

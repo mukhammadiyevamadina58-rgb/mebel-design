@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -10,7 +10,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- ASOSIY CSS FAYLINI ULASH (ENG MUHIM QISM!) -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive-notebook.css' %}?v=6">
+<link rel="stylesheet" href="{% static 'css/responsive-tablet.css' %}?v=6">
+<link rel="stylesheet" href="{% static 'css/responsive-phone.css' %}?v=6">
 </head>
 <body>
 
@@ -20,21 +25,22 @@
             <i class="bi bi-list fs-3"></i>
         </button>
         <span class="ms-3 fw-bold text-dark">MebelPro Design</span>
+        <i class="bi bi-box-seam navbar-furniture-icon fs-5"></i>
     </header>
 
-    <!-- 2. QORA PANEL: Sahifa nomi (Yuqori panelning tagida qotirilgan) -->
-    <div class="bg-dark text-white py-2 px-4 shadow-sm w-100 text-center" style="position: fixed; top: 60px; left: 0; z-index: 1020;">
-    <span class="fs-5 fw-semibold">
-        {% block page_title %}Bosh sahifa{% endblock %}
-    </span>
-</div>
+    <!-- 2. QORA PANEL: Sahifa nomi (Yuqori panel tagiga to'g'ri joylashtirildi) -->
+    <div class="bg-dark text-white py-2 px-4 shadow-sm w-100 text-center page-header-strip" style="position: fixed; top: 60px; left: 0; z-index: 1020; height: 45px; display: flex; align-items: center; justify-content: center;">
+        <span class="fs-5 fw-semibold">
+            {% block page_title %}Sahifangiz{% endblock %}
+        </span>
+    </div>
 
     <!-- Orqa fon qorong'ulashtiruvchi parda -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- 3. ASOSIY KONTENT QISMI (Tepadagi ikki paneldan pastdan boshlanishi uchun padding-top beramiz: 60px + 45px = 105px) -->
-    <div class="app-container" style="padding-top: 40px; min-height: 100vh;">
-        <!-- Alohida qilingan sidebarni shu yerga ulaymiz -->
+    <!-- 3. ASOSIY KONTENT QISMI (padding-top: 105px qilindi) -->
+    <div class="app-container" style="padding-top: 105px; min-height: 100vh; display: flex;">
+        <!-- Chap navbarni ulaymiz -->
         {% include 'chap_nav.html' %}
         
         <!-- Asosiy Kontent -->
@@ -56,7 +62,31 @@
         </main>
     </div>
 
-    <!-- Tizimdan chiqish paytidagi yuklanish oynasi (Zgruska) -->
+    <!-- Modal va Skriptlar qismi -->
+    <div class="modal fade" id="logoutConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 p-2 bg-white">
+                <div class="modal-body text-center p-4">
+                    <div class="mb-3">
+                        <span class="p-3 rounded-circle d-inline-flex" style="background-color: #fbeae9; color: #d9534f;">
+                            <i class="bi bi-box-arrow-right fs-2"></i>
+                        </span>
+                    </div>
+                    <h5 class="fw-bold mb-2 text-dark">Tizimdan chiqish</h5>
+                    <p class="text-muted small mb-4">Rostdan ham tizimdan chiqmoqchimisiz?</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="button" class="btn btn-light px-4 rounded-pill border fw-medium" data-bs-dismiss="modal">
+                            Bekor qilish
+                        </button>
+                        <button type="button" id="confirmLogoutBtn" class="btn btn-danger px-4 rounded-pill fw-medium">
+                            Ha, chiqish
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="logoutOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; color: white;">
         <div class="spinner-border text-light mb-3" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
         <h5 class="fw-bold">Tizimdan chiqilmoqda...</h5>
@@ -66,14 +96,13 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- JavaScript - Toggle tugmasi mantiqi -->
-    <script>
+    <!-- JavaScript kodi -->
+        <script>
         const menuToggleBtn = document.getElementById('menuToggleBtn');
         const sidebarNav = document.getElementById('sidebarNav');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
         const closeBtn = document.getElementById('closeBtn');
 
-        // Sidebar ochish va yopish funksiyalari
         function openSidebar() {
             if (sidebarNav) sidebarNav.classList.add('show', 'active');
             if (sidebarOverlay) sidebarOverlay.classList.add('show', 'active');
@@ -84,33 +113,43 @@
             if (sidebarOverlay) sidebarOverlay.classList.remove('show', 'active');
         }
 
-        if (menuToggleBtn) {
-            menuToggleBtn.addEventListener('click', openSidebar);
-        }
-        
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeSidebar);
-        }
-        
-        if (sidebarOverlay) {
-            sidebarOverlay.addEventListener('click', closeSidebar);
-        }
+        if (menuToggleBtn) menuToggleBtn.addEventListener('click', openSidebar);
+        if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+        if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // Chiqish tugmasi va yuklanish oynasi mantiqi
+        // --- SHU YERDAN BOSHLAB YANGI KODNI QO'SHING ---
         const logoutBtn = document.getElementById('logoutBtn');
+        const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+        const logoutForm = document.getElementById('logout-form');
         const logoutOverlay = document.getElementById('logoutOverlay');
 
-        if (logoutBtn && logoutOverlay) {
-            logoutBtn.addEventListener('click', (e) => {
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                logoutOverlay.style.display = 'flex';
-                setTimeout(() => {
-                    window.location.href = logoutBtn.href;
-                }, 800);
+                // Tasdiqlash modal oynasini ochish
+                const logoutModal = new bootstrap.Modal(document.getElementById('logoutConfirmModal'));
+                logoutModal.show();
             });
         }
+
+        if (confirmLogoutBtn && logoutForm) {
+            confirmLogoutBtn.addEventListener('click', function() {
+                // Modalni yopish
+                const modalEl = document.getElementById('logoutConfirmModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+
+                // Yuklanish animatsiyasini ko'rsatish
+                if (logoutOverlay) {
+                    logoutOverlay.style.display = 'flex';
+                }
+
+                // Chiqish formasini yuborish (POST so'rovi)
+                logoutForm.submit();
+            });
+        }
+        // --- QO'SHISH TUGADI ---
     </script>
-    
     {% block extra_js %}{% endblock %}
 </body>
 </html>

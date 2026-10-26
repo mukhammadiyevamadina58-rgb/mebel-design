@@ -10,13 +10,20 @@ html, body {
 
 /* Hero fon bloki - butun sahifani qoplaydi va orqa fon rasmini ko'rsatadi */
 .hero-background {
-    background: url('/static/images/image.png') no-repeat center top !important;
+    background-image: url('/static/images/image.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: center top !important;
     background-size: cover !important;
     width: 100% !important;
-    min-height: 100vh !important;
+    min-height: 130vh !important;
     position: relative !important;
-    margin-top: 60px !important;
-    
+    /* Navbar fixed bo'lgani uchun yuqoridagi bo'shliqni yo'qotib, pastga suramiz */
+    margin-top: -50px !important; 
+    padding-top: 80px !important; /* Matn navbardan pastda chiroyli turishi uchun */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding-bottom: 100px !important;
 }
 
 /* --- 3. NAVBAR (YUQORI MENYU) --- */
@@ -201,7 +208,35 @@ html, body {
     text-decoration: underline !important;
 }
 
+.main-content-below-bg {
+    background: #4d6492 !important; /* Zamonaviy to'q kulrang fon */
+    width: 100% !important;
+    position: relative !important;
+    z-index: 10 !important;
+    padding-top: 40px !important;
+}
+
+.main-content-below-bg {
+    background-color: #121824 !important;
+}
+
+
+.gif-section-wrapper {
+    background: #1a2238 !important; /* Bu yerga o'zingiz xohlagan boshqa rang dizaynini qo'yishingiz mumkin */
+    width: 100% !important;
+    padding-top: 40px !important;
+    padding-bottom: 20px !important;
+    position: relative !important;
+    z-index: 5 !important;
+    box-shadow: inset 0 15px 25px rgba(0, 0, 0, 0.3); /* Yuqori qismiga chiroyli soya beradi */
+}
+
+
 /* --- 6. PROFESSIOANAL MODAL OYNA --- */
+
+
+
+
 .custom-alert-overlay {
     position: fixed !important;
     top: 0 !important;
@@ -286,17 +321,18 @@ html, body {
 }
 
 /* --- 8. GIF LENTA (MARQUEE) - SHAFFOF SHISHA --- */
+
 .marquee-container {
     width: 100% !important;
     overflow: hidden !important;
     background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 30px 0 80px 0 !important;
+    padding: 30px 0 60px 0 !important;
     margin: 0 !important;
 }
+
+
+
+
 
 .marquee-track {
     display: flex;
@@ -311,6 +347,8 @@ html, body {
 }
 
 /* --- AYNAN YUQORIDAGI .glass-box USLUBI BILAN BIR XIL --- */
+
+
 .marquee-item {
     width: 650px;  
     height: 380px; 
@@ -318,34 +356,255 @@ html, body {
     flex-shrink: 0;
     position: relative;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 1.5rem !important;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
     transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
 }
 
-/* Sichqoncha kelganda yuqoridagi qutilardek ko'tarilib porlashi */
 .marquee-item:hover {
     transform: translateY(-6px) scale(1.01) !important;
-    border-color: rgba(255, 255, 255, 0.5) !important;
+    border-color: rgba(255, 255, 255, 0.45) !important;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 
-                0 0 20px rgba(255, 255, 255, 0.2) !important;
+                0 0 25px rgba(255, 255, 255, 0.2) !important;
 }
 
 .marquee-item img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
-    object-position: center center !important;
     border-radius: 1.4rem !important;
     display: block;
-    background: transparent !important;
 }
+
 
 @keyframes scrollMarquee {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
 }
+
+
+
+/* Til tugmasi qora fon bilan qo'shilib ketmasligi uchun shaffof fon beramiz */
+.navbar .dropdown .btn-outline-light {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    font-weight: 500;
+}
+
+/* Sichqoncha olib borilganda */
+.navbar .dropdown .btn-outline-light:hover,
+.navbar .dropdown .btn-outline-light:focus,
+.navbar .dropdown .btn-outline-light.show {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    color: #ffffff !important;
+}
+
+/* Yer shari ikonkasining rangi */
+.navbar .dropdown .btn-outline-light i {
+    color: #60a5fa !important;
+}
+
+
+
+
+
+
+
+
+/* --- Oldingi CSS kodingiz --- */
+.modern-card {
+    background-color: #534c41;
+    border-radius: 24px;
+    border: none;
+    padding: 16px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.modern-card-large, .card {
+    background: #f3ddb948 !important; /* Yoqimli yumshoq to'q-kulrang (dark gray) */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    color: #4c6264 !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+
+
+
+.modern-card-large .text-muted, 
+.card .text-muted {
+    color: #caa284 !important; /* Chiroyli oqish-kulrang matn rangi */
+}
+
+/* Kartochkaga sichqoncha borgandagi effekt */
+.modern-card-large:hover, .card:hover {
+    transform: translateY(-5px) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+
+
+
+
+
+
+.modern-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+}
+
+.modern-img-box {
+    background-color: #ffffff;
+    border-radius: 20px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modern-card-body {
+    padding: 14px 6px 4px 6px;
+}
+
+.product-title {
+    font-weight: 700;
+    color: #2b2b2b;
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+}
+
+.product-price {
+    font-weight: 600;
+    color: #666666;
+    font-size: 1rem;
+}
+
+.modern-card-large {
+    background-color: #f7f4ef;
+    border-radius: 28px;
+    border: none;
+    padding: 18px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.modern-card-large:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.08);
+}
+
+.modern-img-box-large {
+    background-color: #ffffff;
+    border-radius: 22px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-img-box-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.modern-card-large:hover .modern-img-box-large img {
+    transform: scale(1.03);
+}
+
+/* --- YURAKCHA TUGMASI (TO'G'RILANGAN UZLUKSIZ QISM) --- */
+.like-btn-outline {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #ffffff !important;
+    color: #2b2b2b !important;
+    border: none !important;
+    border-radius: 50% !important;
+    width: 42px !important;
+    height: 42px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.2rem !important;
+    z-index: 10 !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+    transition: all 0.2s ease !important;
+}
+
+.like-btn-outline:hover {
+    transform: scale(1.1) !important;
+}
+
+/* Yurakcha BOSILGANDA (active bo'lganda) Uzum Market uslubida QIZIL bo'lishi */
+.like-btn-outline.active {
+    box-shadow: 0 6px 15px rgba(255, 59, 48, 0.3) !important;
+    transform: scale(1.12) !important;
+}
+
+.like-btn-outline.active i {
+    color: #ff3b30 !important; /* Uzum market yorqin qizil rangi */
+}
+
+.modern-card-body-large {
+    padding: 16px 8px 6px 8px;
+    flex-grow: 1;
+}
+
+.product-title-large {
+    font-weight: 700;
+    color: #2b2b2b;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+}
+
+.product-price-large {
+    font-weight: 600;
+    color: #555555;
+    font-size: 1.05rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

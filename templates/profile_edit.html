@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Profilni tahrirlash" %}{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card bg-white text-dark border-0 shadow-lg rounded-4 p-4 w-100" style="max-width: 450px;">
+        <div class="text-center mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-teal-subtle p-3 mb-2" style="background-color: #e6f4f1; width: 70px; height: 70px;">
+                <i class="bi bi-person-badge fs-2" style="color: #0d9488;"></i>
+            </div>
+            <h4 class="fw-bold mt-2" style="color: #0f766e;">{% trans "Profilni tahrirlash" %}</h4>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label text-secondary fw-semibold">{% trans "Ism" %}</label>
+                <input type="text" name="first_name" class="form-control bg-light text-dark border-0 py-2 shadow-sm rounded-3" value="{{ request.user.first_name }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-secondary fw-semibold">{% trans "Familiya" %}</label>
+                <input type="text" name="last_name" class="form-control bg-light text-dark border-0 py-2 shadow-sm rounded-3" value="{{ request.user.last_name }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-secondary fw-semibold">{% trans "Email" %}</label>
+                <input type="email" name="email" class="form-control bg-light text-dark border-0 py-2 shadow-sm rounded-3" value="{{ request.user.email }}">
+            </div>
+            <button type="submit" class="btn text-white rounded-pill py-2 w-100 fw-bold mt-3 shadow-sm" style="background-color: #0d9488;">{% trans "Saqlash" %}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'catalog_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Materiallar Katalogi" %}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold" style="color: #212529 !important;">{% trans "Materiallar va Teksturalar Katalogi" %}</h2>
+        
+        <p class="mb-0" style="color: #495057 !important; font-weight: 500;">{% trans "Mebelchimiz tomonidan taqdim etilgan barcha materiallar" %}</p>
+    </div>
+
+    <div class="row g-4">
+        {% for material in materials %}
+            <div class="col-md-3 col-sm-6">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 bg-white">
+                    {% if material.image %}
+                        <div class="overflow-hidden" style="height: 200px;">
+                            <img src="{{ material.image.url }}" class="card-img-top w-100 h-100" alt="{{ material.name }}" style="object-fit: cover;">
+                        </div>
+                    {% endif %}
+                    <div class="card-body p-3 text-center">
+                        <!-- Matn aniq ko'rinishi uchun style qo'shildi -->
+                        <h5 class="fw-bold mb-0" style="color: #212529 !important;">{{ material.name }}</h5>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">{% trans "Hozircha materiallar qo'shilmagan." %}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

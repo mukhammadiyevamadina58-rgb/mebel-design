@@ -3,41 +3,48 @@
 {% block title %}Mening loyihalarim - MebelPro{% endblock %}
 
 {% block content %}
-<!-- TO'G'RIDAN-TO'G'RI SHU SAHIFAGA YOZILGAN DIZAYN -->
-<style>
-    .color-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-        cursor: pointer !important;
-    }
-    .color-card:hover, 
-    .color-card:active {
-        transform: translateY(-8px) !important;
-        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.25) !important;
-    }
-</style>
-
 <div class="container py-4">
-    <!-- Sarlavha qoq o'rtada, Yangi loyiha tugmasi o'ng tomonda -->
-    <div class="position-relative d-flex align-items-center justify-content-center mb-4">
-        <h3 class="fw-bold m-0">Mening loyihalarim</h3>
-        <a href="{% url 'create_project' %}" class="btn btn-primary fw-bold position-absolute end-0">+ Yangi loyiha</a>
+    <!-- Sarlavha va Qidiruv qatori -->
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-4">
+            <h3 class="fw-bold m-0 text-primary">Mening loyihalarim</h3>
+        </div>
+        
+        <!-- Qidiruv forma qismi -->
+        <div class="col-md-5">
+            <form method="GET" action="{% url 'my_projects' %}" class="d-flex">
+                <div class="input-group shadow-sm rounded-pill overflow-hidden border bg-white">
+                    <span class="input-group-text bg-transparent border-0 ps-3 text-muted">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" name="q" value="{{ query|default:'' }}" class="form-control border-0 shadow-none py-2" placeholder="Loyiha nomi, turi bo'yicha qidirish...">
+                    {% if query %}
+                    <a href="{% url 'my_projects' %}" class="input-group-text bg-transparent border-0 text-decoration-none text-muted pe-2" title="Tozalash">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                    {% endif %}
+                    <button class="btn btn-primary px-4 fw-semibold" type="submit">Qidirish</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-3 text-md-end">
+            <a href="{% url 'create_project' %}" class="btn btn-primary fw-bold px-4 py-2 rounded-pill shadow-sm w-100 w-md-auto">
+                + Yangi loyiha
+            </a>
+        </div>
     </div>
 
-    <!-- Kartochkalar butun sahifa bo'ylab grid ko'rinishida chiqadi -->
+    <!-- Loyihalar kartochkalari ro'yxati -->
     <div class="row g-4">
         {% for project in projects %}
         <div class="col-md-4">
-            <!-- color-card klassi orqali effekt ishlaydi -->
-            <div class="card color-card p-4 shadow-sm border-0 rounded-4 position-relative h-100 d-flex flex-column">
-                
-                <!-- Yuqori qism: Nomi va o'ng tomonda 3 ta nuqta menyusi -->
+            <div class="card project-card p-4 position-relative h-100 d-flex flex-column shadow-sm border-0 rounded-4" style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px);">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <h5 class="fw-bold text-capitalize m-0">{{ project.get_furniture_type_display }}</h5>
-                    
-                    <!-- 3 nuqtacha dropdown menyu -->
+                    <h5 class="fw-bold text-capitalize m-0 text-primary">{{ project.get_furniture_type_display|default:project.furniture_type }}</h5>
                     <div class="dropdown">
                         <button class="btn btn-link text-muted p-0 text-decoration-none shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical fs-4"></i>
+                            <i class="bi bi-three-dots-vertical fs-5"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
                             <li>
@@ -47,7 +54,6 @@
                             </li>
                             <li><hr class="dropdown-divider my-1"></li>
                             <li>
-                                <!-- O'chirish modal oynasini ochish uchun tugma -->
                                 <button type="button" class="dropdown-item py-2 px-3 text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ project.pk }}">
                                     <i class="bi bi-trash me-2"></i> O'chirish
                                 </button>
@@ -56,38 +62,36 @@
                     </div>
                 </div>
 
-                <!-- Loyiha ma'lumotlari -->
                 <div class="mb-2 d-flex align-items-center">
-                    <i class="bi bi-tag me-2 text-muted fs-6"></i>
-                    <span><strong>Nomi:</strong> <strong class="text-dark">{{ project.name }}</strong></span>
+                    <i class="bi bi-tag me-2 text-secondary fs-6"></i>
+                    <span><strong>Nomi:</strong> <span class="text-dark">{{ project.title }}</span></span>
                 </div>
                 <div class="mb-2 d-flex align-items-center">
-                    <i class="bi bi-box me-2 text-muted fs-6"></i>
-                    <span><strong>O'lchamlari:</strong> <strong class="text-dark">{{ project.width }} x {{ project.height }} x {{ project.depth }} sm</strong></span>
+                    <i class="bi bi-box me-2 text-secondary fs-6"></i>
+                    <span><strong>O'lchamlari:</strong> <span class="text-dark">{{ project.width }} x {{ project.height }} x {{ project.depth }} sm</span></span>
                 </div>
                 <div class="mb-2 d-flex align-items-center">
-                    <i class="bi bi-layers me-2 text-muted fs-6"></i>
-                    <span><strong>Material:</strong> <strong class="text-dark">{{ project.material }}</strong></span>
+                    <i class="bi bi-layers me-2 text-secondary fs-6"></i>
+                    <span><strong>Material:</strong> <span class="text-dark">{{ project.material }}</span></span>
                 </div>
                 <div class="mb-3 d-flex align-items-center">
-                    <i class="bi bi-palette me-2 text-muted fs-6"></i>
-                    <span><strong>Rang:</strong> <strong class="text-dark">{{ project.color }}</strong></span>
+                    <i class="bi bi-palette me-2 text-secondary fs-6"></i>
+                    <span><strong>Rang:</strong> <span class="text-dark">{{ project.color }}</span></span>
                 </div>
                 
-                <!-- Pastki qism: Narx va tugma -->
-                <div class="mt-auto">
-                    <h5 class="fw-bold text-success mb-3">{{ project.estimated_price }} so'm</h5>
-                    <a href="{% url 'project_detail' project.id %}" class="btn btn-outline-primary btn-sm px-3 rounded-pill fw-medium w-100">
-                        Kirish <i class="bi bi-arrow-right ms-1"></i>
+                <div class="mt-auto pt-3 border-top">
+                    <h5 class="fw-bold mb-3 text-success">{{ project.estimated_price }} so'm</h5>
+                    <a href="{% url 'craftsman_project_detail' project.pk %}" class="btn btn-outline-primary w-100 rounded-pill fw-semibold">
+                        Kirish &rarr;
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- O'chirish modali -->
+        <!-- O'chirish oynasi (Modal) -->
         <div class="modal fade" id="deleteModal{{ project.pk }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow rounded-4 p-2">
+                <div class="modal-content border-0 shadow rounded-4 p-2 bg-white">
                     <div class="modal-body text-center p-4">
                         <div class="mb-3">
                             <span class="bg-danger-subtle text-danger p-3 rounded-circle d-inline-flex">
@@ -95,9 +99,7 @@
                             </span>
                         </div>
                         <h5 class="fw-bold mb-2">Loyihani o'chirish</h5>
-                        <p class="text-muted small mb-4">
-                            "<strong>{{ project.name }}</strong>" loyihasini haqiqatan ham o'chirmoqchimisiz?
-                        </p>
+                        <p class="text-muted small mb-4">"<strong>{{ project.title }}</strong>" loyihasini haqiqatan ham o'chirmoqchimisiz?</p>
                         <div class="d-flex justify-content-center gap-2">
                             <button type="button" class="btn btn-light px-4 rounded-3 border fw-medium" data-bs-dismiss="modal">Bekor qilish</button>
                             <form action="{% url 'delete_project' project.pk %}" method="POST" class="d-inline">
@@ -111,7 +113,12 @@
         </div>
         {% empty %}
         <div class="col-12 text-center py-5">
-            <p class="text-muted">Hozircha loyihalar mavjud emas.</p>
+            <div class="p-5 bg-white rounded-4 shadow-sm border d-inline-block">
+                <i class="bi bi-folder2-open display-4 text-muted mb-3 d-block"></i>
+                <h5 class="fw-bold text-secondary">Hozircha loyihalar topilmadi</h5>
+                <p class="text-muted small mb-3">Qidiruv bo'yicha hech qanday natija yo'q yoki hali yangi loyiha qo'shmagansiz.</p>
+                <a href="{% url 'create_project' %}" class="btn btn-primary rounded-pill px-4 fw-bold">Yangi loyiha yaratish</a>
+            </div>
         </div>
         {% endfor %}
     </div>

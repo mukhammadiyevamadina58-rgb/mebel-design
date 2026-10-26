@@ -1,9 +1,10 @@
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MebelDesign - Tizimga kirish</title>
+    <title>{% trans "MebelDesign - Tizimga kirish" %}</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -24,7 +25,7 @@
     <div class="card auth-card border-0 p-4 p-md-5 bg-white">
         <div class="text-center mb-4">
             <h2 class="fw-bold text-primary"><i class="bi bi-box-seam me-2"></i>MebelDesign</h2>
-            <p class="text-muted small mb-0">Tizimga kirish</p>
+            <p class="text-muted small mb-0">{% trans "Tizimga kirish" %}</p>
         </div>
 
         <!-- Xabarlar chiqish qismi -->
@@ -41,30 +42,37 @@
             {% csrf_token %}
 
             <div class="mb-3">
-                <label class="form-label small text-secondary fw-semibold">Username yoki Telefon raqam</label>
+                <label class="form-label small text-secondary fw-semibold">{% trans "Username yoki Telefon raqam" %}</label>
                 <input type="text" 
                        name="username" 
                        class="form-control"
-                       placeholder="Username yoki +998901234567" 
+                       autocomplete="off"
+                       placeholder="{% trans 'Username yoki +998901234567' %}" 
                        required>
             </div>
 
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                    <label class="form-label small text-secondary fw-semibold mb-0">Parol</label>
-                    <a href="{% url 'password_reset' %}" class="small text-decoration-none text-muted">Parolni unutdingizmi?</a>
+                    <label class="form-label small text-secondary fw-semibold mb-0">{% trans "Parol" %}</label>
+                    <!-- Telefonda bosish oson bo'lishi uchun klasslar qo'shildi -->
+                    <a href="{% url 'password_reset' %}" class="small text-decoration-none text-primary fw-semibold py-1">{% trans "Parolni unutdingizmi?" %}</a>
                 </div>
-                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                <input type="password" 
+                       name="password" 
+                       class="form-control" 
+                       autocomplete="new-password"
+                       placeholder="••••••••" 
+                       required>
             </div>
 
             <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-bold mb-3">
-                Kirish
+                {% trans "Kirish" %}
             </button>
         </form>
 
         <div class="text-center pt-3 border-top small">
-            <span class="text-muted">Akkuntingiz yo'qmi?</span> 
-            <a href="{% url 'register' %}" class="text-decoration-none fw-bold text-primary ms-1">Ro'yxatdan o'tish</a>
+            <span class="text-muted">{% trans "Akkuntingiz yo'qmi?" %}</span> 
+            <a href="{% url 'register' %}" class="text-decoration-none fw-bold text-primary ms-1">{% trans "Ro'yxatdan o'tish" %}</a>
         </div>
     </div>
 

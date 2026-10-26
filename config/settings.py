@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,6 +26,17 @@ SECRET_KEY = 'django-insecure-jqhkn*5x-@%ip$k8%$wa9g0ln57x84w!xjl+mrva0$^ml$3!kh
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+LANGUAGE_CODE = 'uz'
+
+LANGUAGES = [
+    ('uz', _('Uzbek')),
+    ('ru', _('Russian')),
+    ('en', _('English')),
+]
+
+USE_I18N = True
+
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -55,7 +68,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.locale.LocaleMiddleware',           # <-- AKURAT SHU YERDA BO'LISHI SHART!
+    
 ]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',  # yoki os.path.join(BASE_DIR, 'locale')
+]
+
+
+IGNORABLE_PATTERNS = ['requirements.txt', '*.venv', 'venv']
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -123,11 +146,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-STATIC_URL = 'static/'
+
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
 
 
 # Email
@@ -139,14 +163,12 @@ MAILERS = {
     },
 }
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'client_projects'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
-import os
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

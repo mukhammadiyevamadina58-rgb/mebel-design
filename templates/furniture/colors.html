@@ -1,41 +1,46 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block page_title %}
-MDF ranglari
-{% endblock %}
+{% block page_title %}MDF ranglari{% endblock %}
 
 {% block content %}
-<!-- Kartochkalar uchun silliq oldinga chiqish effekti stili -->
-<style>
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-    }
-    .card:hover, .card:active {
-        transform: translateY(-6px);
-        box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
-    }
-</style>
 
-<div class="container-fluid py-4" style="margin-top: 60px;">
-    <div class="row">
-        <!-- Chap tomon: MDF Ranglari (Kvadrat shaklida) -->
+<div class="container-fluid py-4">
+    <!-- Sarlavha va Qidiruv qatori -->
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-5">
+            <h3 class="fw-bold m-0 text-primary">MDF Ranglari</h3>
+        </div>
+        <div class="col-md-7">
+            <form method="GET" action="{% url 'manage_colors' %}" class="d-flex">
+                <div class="input-group shadow-sm rounded-pill overflow-hidden border bg-white">
+                    <span class="input-group-text bg-transparent border-0 ps-3 text-muted">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" name="q" value="{{ query|default:'' }}" class="form-control border-0 shadow-none py-2" placeholder="Rang nomi bo'yicha qidirish...">
+                    {% if query %}
+                    <a href="{% url 'manage_colors' %}" class="input-group-text bg-transparent border-0 text-decoration-none text-muted pe-2" title="Tozalash">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                    {% endif %}
+                    <button class="btn btn-primary px-4 fw-semibold" type="submit">Qidirish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4">
         <div class="col-lg-8">
-            <h3 class="fw-bold mb-4">MDF Ranglari</h3>
             <div class="row g-3">
                 {% for col in colors %}
                     <div class="col-md-3 col-sm-4 col-6">
-                        <div class="card shadow-sm h-100 border-0 position-relative">
-                            
-                            <!-- 3 nuqtacha dropdown menyu -->
+                        <div class="card color-card shadow-sm h-100 position-relative overflow-hidden">
                             <div class="dropdown position-absolute top-0 end-0 m-2" style="z-index: 10;">
                                 <button class="btn btn-light btn-sm rounded-circle shadow-sm p-1 d-flex align-items-center justify-content-center bg-white opacity-75" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 30px; height: 30px;">
                                     <i class="bi bi-three-dots-vertical text-dark"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
                                     <li>
-                                        <!-- O'chirish modalini ochish tugmasi -->
                                         <button type="button" class="dropdown-item py-2 px-3 text-danger small" data-bs-toggle="modal" data-bs-target="#deleteColorModal{{ col.id }}">
                                             <i class="bi bi-trash me-2"></i> O'chirish
                                         </button>
@@ -44,16 +49,15 @@ MDF ranglari
                             </div>
 
                             <img src="{{ col.image.url }}" class="card-img-top" alt="{{ col.name }}" style="width: 100%; height: 160px; object-fit: cover;">
-                            <div class="card-body p-2 text-center">
-                                <h6 class="card-title m-0 fw-semibold">{{ col.name }}</h6>
+                            <div class="card-body p-2 text-center bg-white">
+                                <h6 class="card-title m-0 fw-semibold text-dark">{{ col.name }}</h6>
                             </div>
                         </div>
                     </div>
 
-                    <!-- HAR BIR RANG UCHUN SAHIFADA CHIQADIGAN O'CHIRISH MODALI -->
                     <div class="modal fade" id="deleteColorModal{{ col.id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content border-0 shadow rounded-4 p-2">
+                            <div class="modal-content border-0 shadow rounded-4 p-2 bg-white">
                                 <div class="modal-body text-center p-4">
                                     <div class="mb-3">
                                         <span class="bg-danger-subtle text-danger p-3 rounded-circle d-inline-flex">
@@ -61,9 +65,7 @@ MDF ranglari
                                         </span>
                                     </div>
                                     <h5 class="fw-bold mb-2">Rangni o'chirish</h5>
-                                    <p class="text-muted small mb-4">
-                                        "<strong>{{ col.name }}</strong>" rangini haqiqatan ham o'chirmoqchimisiz?
-                                    </p>
+                                    <p class="text-muted small mb-4">"<strong>{{ col.name }}</strong>" rangini haqiqatan ham o'chirmoqchimisiz?</p>
                                     <div class="d-flex justify-content-center gap-2">
                                         <button type="button" class="btn btn-light px-4 rounded-3 border fw-medium" data-bs-dismiss="modal">Bekor qilish</button>
                                         <form action="{% url 'delete_color' col.id %}" method="POST" class="d-inline">
@@ -75,22 +77,21 @@ MDF ranglari
                             </div>
                         </div>
                     </div>
-                    <!-- MODAL TUGADI -->
-
                 {% empty %}
-                    <p class="text-muted">Hozircha ranglar qo'shilmagan.</p>
+                    <div class="col-12 text-center py-4">
+                        <p class="text-muted">Hozircha ranglar topilmadi.</p>
+                    </div>
                 {% endfor %}
             </div>
         </div>
 
-        <!-- O'ng tomon: Rang qo'shish formasi -->
         <div class="col-lg-4">
-            <div class="card shadow-sm border-0 p-4 sticky-top" style="top: 80px;">
-                <h4 class="fw-bold mb-3 text-dark">Yangi rang qo'shish</h4>
+            <div class="card custom-card p-4 sticky-top" style="top: 80px;">
+                <h4 class="fw-bold mb-3 text-primary">Yangi rang qo'shish</h4>
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit" class="btn btn-success w-100">Rangni saqlash</button>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold py-2 rounded-pill shadow-sm">Rangni saqlash</button>
                 </form>
             </div>
         </div>
