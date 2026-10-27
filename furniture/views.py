@@ -181,7 +181,7 @@ def mebelchi_dashboard(request):
     # Agar shablon 'seller' papkasi ichida bo'lsa:
     return render(request, 'furniture/seller/mebelchi_dashboard.html', context)
 
-TELEGRAM_BOT_TOKEN = "8761510532:AAH-jWXX7gIXXh1aB6_OCzXciHJzHc5AMms"  # Tokeningiz to'g'ri yozildi
+TELEGRAM_BOT_TOKEN = "8761510532:AAFqTMcrITswIM1sFOfPatEPHSw2RifdB5k"  # Tokeningiz to'g'ri yozildi
 
 def send_telegram_message(chat_id, text, reply_markup=None):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
