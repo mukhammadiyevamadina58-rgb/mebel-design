@@ -165,7 +165,7 @@ def verify_code_view(request):
 
     context = {
         'phone': profile.phone,
-        'bot_username': 'MebelDesignBot'  # O'zingizning botingiz username-ini yozing
+        'bot_username': 'Master_MebelBot'  # Botning username-i
     }
     return render(request, 'furniture/verify_code.html', context)
 
@@ -181,7 +181,7 @@ def mebelchi_dashboard(request):
     # Agar shablon 'seller' papkasi ichida bo'lsa:
     return render(request, 'furniture/seller/mebelchi_dashboard.html', context)
 
-TELEGRAM_BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"  # Bot tokeningizni yozing
+TELEGRAM_BOT_TOKEN = "8761510532:AAH-jWXX7gIXXh1aB6_OCzXciHJzHc5AMms"  # Tokeningiz to'g'ri yozildi
 
 def send_telegram_message(chat_id, text, reply_markup=None):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
@@ -291,7 +291,9 @@ def password_reset_view(request):
         
     return render(request, 'furniture/password_reset.html')
 
-    
+
+
+
 
 # 8. Tizimdan chiqish (Logout)
 def logout_view(request):

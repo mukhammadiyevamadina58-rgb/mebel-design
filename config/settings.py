@@ -42,7 +42,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'culpable-manicotti-octane.ngrok-free.dev',
-    'mebel-design.onrender.com',  
+    'mebel-design.onrender.com', 
+    '*', 
 ]
 
 
@@ -172,3 +173,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://mebel-design.onrender.com',
+]

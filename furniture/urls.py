@@ -10,6 +10,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),  # Kirish sahifasi
     path('register/', views.register_view, name='register'),  # Ro'yxatdan o'tish
     path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('verify/', views.verify_code_view, name='verify_code'),
     
     # Loyihalar bilan bog'liq yo'llar (Tartib muhim!)
     path('projects/', views.my_projects_view, name='my_projects'),
