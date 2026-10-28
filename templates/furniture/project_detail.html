@@ -1,7 +1,7 @@
 {% extends 'catalog_base.html' %}
 {% load i18n %}
 
-{% block title %}{{ project.title|default:"Loyiha tafsilotlari" }} - MebelPro{% endblock %}
+{% block title %}{{ project.title|default:_("Loyiha tafsilotlari") }} - MebelPro{% endblock %}
 
 {% block content %}
 <div class="container my-5">
@@ -17,31 +17,32 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
                 <!-- Rasm qismi -->
-                {% if project.image %}
-                    <div class="bg-light rounded-4 overflow-hidden mb-4 shadow-sm" style="height: 380px;">
-                        <img src="{{ project.image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ project.title }}">
-                    </div>
-                {% elif project.additional_images.first %}
+                {% if project.additional_images.first %}
                     <div class="bg-light rounded-4 overflow-hidden mb-4 shadow-sm" style="height: 380px;">
                         <img src="{{ project.additional_images.first.image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ project.title }}">
                     </div>
                 {% else %}
-                    <div class="bg-secondary-subtle rounded-4 d-flex align-items-center justify-content-center mb-4" style="height: 380px;">
-                        <i class="bi bi-box-seam fs-1 text-muted"></i>
+                    <div class="bg-light rounded-4 d-flex flex-column align-items-center justify-content-center mb-4 text-muted" style="height: 380px;">
+                        <i class="bi bi-box-seam display-4 mb-2 opacity-50"></i>
+                        <span>{% trans "Rasm yuklanmagan" %}</span>
                     </div>
                 {% endif %}
 
                 <!-- Sarlavha va Reyting -->
                 <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
                     <div>
-                        <h2 class="fw-bold text-dark mb-1">{{ project.title|default:project.name }}</h2>
-                        <div class="text-warning fs-5">
-                            ★ <span class="fw-bold text-dark">{{ project.average_rating|default:"0.0" }}</span> 
-                            <span class="text-muted small">({{ project.reviews_count|default:"0" }} {% trans "ta sharh" %})</span>
+                        <h2 class="fw-bold text-dark mb-1">{{ project.title|default:_("Mebel loyihasi") }}</h2>
+                        <div class="text-warning fs-5 d-flex align-items-center gap-2">
+                            {% if project.reviews_count > 0 %}
+                                <div>★ <strong style="color: #000000 !important;">{{ project.average_rating }}</strong></div>
+                                <span class="text-muted small">({{ project.reviews_count }} {% trans "ta sharh" %})</span>
+                            {% else %}
+                                <span class="text-muted small">☆ {% trans "Hali baho yo'q" %}</span>
+                            {% endif %}
                         </div>
                     </div>
                     <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold">
-                        {{ project.furniture_type|default:"Mebel" }}
+                        {% trans project.furniture_type|default:"Mebel" %}
                     </span>
                 </div>
 
@@ -49,24 +50,34 @@
 
                 <!-- Xususiyatlari -->
                 <h5 class="fw-bold text-dark mb-3">{% trans "To'liq xususiyatlari:" %}</h5>
-                <ul class="list-unstyled text-secondary mb-4">
-                    <li class="mb-3 d-flex align-items-center justify-content-between border-bottom pb-2">
-                        <span class="d-flex align-items-center gap-2 text-dark">
-                            <i class="bi bi-arrows-move text-primary fs-5"></i> {% trans "O'lchamlari (E x B x Chuqur):" %}
-                        </span>
-                        <strong class="text-dark">{{ project.width|default:"180" }} x {{ project.height|default:"211" }} x {{ project.depth|default:"60" }} {% trans "sm" %}</strong>
+                <ul class="list-unstyled mb-4 text-start">
+                    <!-- O'lchamlari -->
+                    <li class="mb-3 pb-2 border-bottom">
+                        <div class="text-dark mb-1 fw-semibold d-flex align-items-center gap-2">
+                            <i class="bi bi-arrows-move text-primary fs-5"></i> {% trans "O'lchamlari (Eni x Balandligi x Chuqurligi):" %}
+                        </div>
+                        <div style="color: #111111 !important; font-weight: 700; padding-left: 28px;">
+                            {{ project.width|default:"0" }} x {{ project.height|default:"0" }} 
+                            {% if project.depth and project.depth != 0 %}x {{ project.depth }}{% endif %} {% trans "sm" %}
+                        </div>
                     </li>
-                    <li class="mb-3 d-flex align-items-center justify-content-between border-bottom pb-2">
-                        <span class="d-flex align-items-center gap-2 text-dark">
-                            <i class="bi bi-palette text-primary fs-5"></i> {% trans "Rang / Tekstura:" %}
-                        </span>
-                        <strong class="text-dark">{{ project.color|default:"Ko'rsatilmagan" }}</strong>
+                    <!-- Material va Rang -->
+                    <li class="mb-3 pb-2 border-bottom">
+                        <div class="text-dark mb-1 fw-semibold d-flex align-items-center gap-2">
+                            <i class="bi bi-palette text-primary fs-5"></i> {% trans "Material / Rang:" %}
+                        </div>
+                        <div style="color: #111111 !important; font-weight: 700; padding-left: 28px;">
+                            {{ project.material|default:"MDF" }} / {{ project.color|default:_("Ko'rsatilmagan") }}
+                        </div>
                     </li>
-                    <li class="mb-2 d-flex align-items-center justify-content-between pb-1">
-                        <span class="d-flex align-items-center gap-2 text-dark">
+                    <!-- Saqlangan sana -->
+                    <li class="mb-2 pb-1">
+                        <div class="text-dark mb-1 fw-semibold d-flex align-items-center gap-2">
                             <i class="bi bi-calendar-event text-primary fs-5"></i> {% trans "Saqlangan sana:" %}
-                        </span>
-                        <strong class="text-dark">{{ project.created_at|date:"d.m.Y" }}</strong>
+                        </div>
+                        <div style="color: #111111 !important; font-weight: 700; padding-left: 28px;">
+                            {{ project.created_at|date:"d.m.Y" }}
+                        </div>
                     </li>
                 </ul>
 
@@ -89,13 +100,14 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label class="form-label small fw-semibold text-secondary">{% trans "Bahoyingiz:" %}</label>
-                        <div class="text-warning fs-4 d-flex gap-1" style="cursor: pointer;">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
+                        <div class="text-warning fs-4 d-flex gap-1" style="cursor: pointer;" id="starRatingContainer">
+                            <i class="bi bi-star-fill star-item" data-value="1"></i>
+                            <i class="bi bi-star-fill star-item" data-value="2"></i>
+                            <i class="bi bi-star-fill star-item" data-value="3"></i>
+                            <i class="bi bi-star-fill star-item" data-value="4"></i>
+                            <i class="bi bi-star-fill star-item" data-value="5"></i>
                         </div>
+                        <input type="hidden" name="rating" id="ratingValueInput" value="5">
                     </div>
                     <div class="mb-3">
                         <label for="comment" class="form-label small fw-semibold text-secondary">{% trans "Sharhingiz:" %}</label>
@@ -108,22 +120,26 @@
             <!-- Fikrlar ro'yxati -->
             <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
                 <h5 class="fw-bold text-dark mb-3 fs-6">
-                    <i class="bi bi-chat-square-text me-2"></i>{% trans "Mijozlar fikrlari va baholari" %} ({{ reviews.count|default:"0" }})
+                    <i class="bi bi-chat-square-text me-2"></i>{% trans "Mijozlar fikrlari va baholari" %} ({{ project.reviews_count|default:"0" }})
                 </h5>
                 
-                {% if reviews %}
+                {% if project.reviews.all %}
                     <div class="d-flex flex-column gap-3 mt-3">
-                        {% for review in reviews %}
-                            <div class="p-3 bg-light rounded-3 border">
+                        {% for review in project.reviews.all %}
+                            <div class="p-3 bg-light rounded-3 border text-start" style="background-color: #f8f9fa !important;">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <strong class="small text-dark">{{ review.user.username }}</strong>
+                                    <strong class="fw-bold" style="color: #000000 !important; font-size: 14px;">
+                                        <i class="bi bi-person-circle text-primary me-1"></i> {{ review.user.username }}
+                                    </strong>
                                     <span class="text-warning small">
                                         {% for i in "12345" %}
                                             {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
                                         {% endfor %}
                                     </span>
                                 </div>
-                                <p class="small text-muted mb-0">{{ review.comment }}</p>
+                                <p class="mb-0" style="color: #212529 !important; word-break: break-all; font-size: 14px;">
+                                    {{ review.comment }}
+                                </p>
                             </div>
                         {% endfor %}
                     </div>
@@ -137,4 +153,30 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const stars = document.querySelectorAll('.star-item');
+        const ratingInput = document.getElementById('ratingValueInput');
+
+        if (stars.length > 0 && ratingInput) {
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    ratingInput.value = value;
+
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute('data-value')) <= parseInt(value)) {
+                            s.classList.remove('bi-star');
+                            s.classList.add('bi-star-fill');
+                        } else {
+                            s.classList.remove('bi-star-fill');
+                            s.classList.add('bi-star');
+                        }
+                    });
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}

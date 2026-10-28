@@ -6,21 +6,31 @@
 {% block content %}
 <div class="container my-5">
     <div class="text-center mb-5">
-    <h2 class="fw-bold text-dark">KATTA TAYYOR LOYIHALAR</h2>
-    <!-- Adăugați stilul explicit pentru culoare și grosime -->
-    <p class="mb-0" style="color: #495057 !important; font-weight: 500;">Mijozlarning sharhlari va yulduzchalari bilan</p>
-</div>
+        <h2 class="fw-bold text-dark">{% trans "Tayyor Loyihalar Katalogi" as t_catalog %}{{ t_catalog|upper }}</h2>
+        <p class="mb-0 text-secondary fw-semibold">{% trans "Mebelchilar tomonidan yaratilgan va saqlangan loyihalar" %}</p>
+    </div>
+
+    {% trans "Loyiha nomi yoki turi bo'yicha qidirish..." as search_ph %}
+    <!-- Qidiruv paneli -->
+    <form method="GET" class="row justify-content-center mb-5">
+        <div class="col-md-6">
+            <div class="input-group shadow-sm rounded-pill overflow-hidden">
+                <input type="text" name="q" value="{{ query|default:'' }}" class="form-control border-0 px-4 py-3" placeholder="{{ search_ph }}">
+                <button class="btn btn-dark px-4" type="submit">{% trans "Qidirish" %}</button>
+            </div>
+        </div>
+    </form>
 
     <div class="row g-4">
         {% for project in projects %}
             <div class="col-lg-6 mb-4">
                 <div class="card border-0 shadow-lg rounded-4 overflow-hidden h-100 bg-white position-relative">
                     
-                    <!-- YURAKCHA TUGMASI (To'g'rilangan variant) -->
+                    <!-- Sevimlilarga qo'shish (Yurakcha) -->
                     {% if request.user.is_authenticated and request.user.userprofile.role != 'maker' %}
-                        <a href="{% url 'toggle_favorite' project.id %}" 
-                           class="position-absolute top-0 end-0 m-3 bg-white rounded-circle shadow text-decoration-none favorite-toggle-btn" 
-                           style="z-index: 9999 !important; cursor: pointer !important; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
+                        <a href="{% url 'toggle_favorite' project.pk %}" 
+                           class="position-absolute top-0 end-0 m-3 bg-white rounded-circle shadow text-decoration-none d-flex align-items-center justify-content-center" 
+                           style="z-index: 99; width: 42px; height: 42px;">
                             {% if request.user in project.favorites.all %}
                                 <i class="bi bi-heart-fill text-danger fs-4"></i>
                             {% else %}
@@ -29,39 +39,65 @@
                         </a>
                     {% endif %}
 
+                    <!-- Loyiha rasmi -->
                     {% if project.additional_images.first %}
-                        <div class="bg-light" style="height: 300px;">
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
                             <img src="{{ project.additional_images.first.image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ project.title }}">
                         </div>
                     {% else %}
-                        <div class="bg-secondary-subtle d-flex align-items-center justify-content-center" style="height: 300px;">
-                            <i class="bi bi-box-seam fs-1 text-muted"></i>
+                        <div class="bg-light d-flex flex-column align-items-center justify-content-center text-muted" style="height: 220px;">
+                            <i class="bi bi-box-seam display-4 mb-2 opacity-50"></i>
+                            <span class="small">{% trans "Rasm yuklanmagan" %}</span>
                         </div>
                     {% endif %}
                     
                     <div class="card-body p-4">
-                        <h3 class="fw-bold text-dark">{{ project.title }}</h3>
-                        <p class="text-muted mb-2"><strong>{% trans "O'lcham:" %}</strong> {{ project.width }}x{{ project.height }}x{{ project.depth }} {% trans "sm" %} | <strong>{% trans "Rang:" %}</strong> {{ project.color }}</p>
+                        <!-- Sarlavha (Loyiha nomi / Mebel turi) -->
+                        <h4 class="fw-bold text-dark mb-2">
+                            {% if project.title %}{{ project.title }}{% else %}{% trans project.furniture_type|default:"Mebel loyihasi" %}{% endif %}
+                        </h4>
+                        
+                        <!-- O'lchamlari, Material va Rangi (Aniq va to'q qora rangda) -->
+                        <p class="mb-2 small" style="color: #212529 !important;">
+                            <strong style="color: #000000 !important;">{% trans "O'lcham:" %}</strong> 
+                            <span style="color: #212529 !important; font-weight: 600;">
+                                {{ project.width|default:"0" }} x {{ project.height|default:"0" }} 
+                                {% if project.depth and project.depth != 0 %}x {{ project.depth }}{% endif %} {% trans "sm" %}
+                            </span> | 
+                            <strong style="color: #000000 !important;">{% trans "Material / Rang:" %}</strong> 
+                            <span style="color: #212529 !important;">{{ project.material|default:"MDF" }} / {{ project.color|default:_("Ko'rsatilmagan") }}</span>
+                        </p>
                         
                         <!-- Reyting -->
-                        <div class="mb-3 text-warning fs-5">
-                            ★ {{ project.average_rating }} <span class="text-muted small">({{ project.reviews_count }} {% trans "ta sharh" %})</span>
-                        </div>
+                        <div class="mb-3">
+    {% if project.reviews_count > 0 %}
+        <span class="text-warning">★</span>
+        <strong class="text-dark">{{ project.average_rating }}</strong>
+        <span class="text-muted small">({{ project.reviews_count }} {% trans "ta sharh" %})</span>
+    {% else %}
+        <span class="text-muted small">☆ {% trans "Hali baho yo'q" %}</span>
+    {% endif %}
+</div>
 
-                        <!-- Oxirgi izohlar -->
-                        <div class="mb-3 p-3 bg-light rounded-3">
-                            <span class="small fw-bold text-secondary">{% trans "Oxirgi fikrlar:" %}</span>
+                        <!-- Oxirgi sharhlar -->
+                        <div class="mb-3 p-3 bg-light rounded-3 border">
+                            <span class="small fw-bold text-secondary d-block mb-1">{% trans "Oxirgi fikrlar:" %}</span>
                             {% for review in project.reviews.all|slice:":2" %}
-                                <div class="small mt-1 text-dark">
-                                    <strong>{{ review.user.username }}:</strong> {{ review.comment }} ({{ review.rating }}★)
+                                <div class="small text-dark mb-1">
+                                    <strong style="color: #000000 !important;">
+                                        <i class="bi bi-person-circle text-primary me-1"></i>{{ review.user.username }}:
+                                    </strong> 
+                                    <span style="color: #212529 !important;">{{ review.comment }}</span> 
+                                    <span class="text-warning">({{ review.rating }}★)</span>
                                 </div>
                             {% empty %}
                                 <p class="small text-muted mb-0 fst-italic">{% trans "Hozircha sharhlar yo'q." %}</p>
                             {% endfor %}
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="fs-4 fw-bold text-success">{{ project.estimated_price }} {% trans "so'm" %}</span>
+                        <!-- Narxi va Batafsil ko'rish tugmasi -->
+                        <div class="d-flex justify-content-between align-items-center pt-2">
+                            <span class="fs-4 fw-bold text-success">{{ project.estimated_price|default:"0" }} {% trans "so'm" %}</span>
                             <a href="{% url 'project_detail' project.pk %}" class="btn btn-dark rounded-pill px-4">{% trans "Batafsil ko'rish" %}</a>
                         </div>
                     </div>
@@ -69,30 +105,13 @@
             </div>
         {% empty %}
             <div class="col-12 text-center py-5">
-                <p class="text-muted">{% trans "Hozircha tayyor loyihalar qo'shilmagan." %}</p>
+                <div class="p-5 bg-white rounded-4 shadow-sm">
+                    <i class="bi bi-folder2-open display-3 text-muted mb-3"></i>
+                    <h4 class="text-secondary">{% trans "Hozircha tayyor loyihalar mavjud emas" %}</h4>
+                    <p class="text-muted mb-0">{% trans "Mebelchilar yangi loyihalarni saqlagach, ular shu yerda kartochka shaklida ko'rinadi." %}</p>
+                </div>
             </div>
         {% endfor %}
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    // Sohranyaem pozitsiyu skrolla, chtoby stranitsa ne prygala vverh pri klike
-    document.addEventListener("DOMContentLoaded", function() {
-        const favButtons = document.querySelectorAll('.favorite-toggle-btn');
-        
-        favButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                sessionStorage.setItem('scrollPosition', window.scrollY);
-            });
-        });
-
-        const scrollPos = sessionStorage.getItem('scrollPosition');
-        if (scrollPos) {
-            window.scrollTo(0, parseInt(scrollPos));
-            sessionStorage.removeItem('scrollPosition');
-        }
-    });
-</script>
 {% endblock %}

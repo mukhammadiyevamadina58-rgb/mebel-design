@@ -1973,3 +1973,91 @@ msgstr "Код подтверждения отправлен на номер <b>
 #~ msgid "Mijozlar hali ushbu loyihaga sharh qoldirishgani yo'q."
 #~ msgstr "Клиенты пока не оставили отзывов об этом проекте."
 
+
+msgid "Mebelchilar tomonidan yaratilgan va saqlangan loyihalar"
+msgstr "Проекты, созданные и сохранённые мебельщиками"
+
+msgid "Loyiha nomi yoki turi bo'yicha qidirish..."
+msgstr "Поиск по названию или типу проекта..."
+
+msgid "Loyiha nomi, turi bo'yicha qidirish..."
+msgstr "Поиск по названию, типу проекта..."
+
+msgid "Mebel"
+msgstr "Мебель"
+
+msgid "Loyiha tafsilotlari"
+msgstr "Детали проекта"
+
+msgid "Ko'rsatilmagan"
+msgstr "Не указано"
+
+msgid "Hozircha tayyor loyihalar mavjud emas"
+msgstr "Готовых проектов пока нет"
+
+msgid "Mebelchilar yangi loyihalarni saqlagach, ular shu yerda kartochka shaklida ko'rinadi."
+msgstr "Когда мебельщики сохранят новые проекты, они появятся здесь в виде карточек."
+
+msgid "Mening loyihalarim"
+msgstr "Мои проекты"
+
+msgid "Tozalash"
+msgstr "Очистить"
+
+msgid "Yangi loyiha"
+msgstr "Новый проект"
+
+msgid "O'chirish"
+msgstr "Удалить"
+
+msgid "Nomi:"
+msgstr "Название:"
+
+msgid "Material:"
+msgstr "Материал:"
+
+msgctxt "project open"
+msgid "Kirish"
+msgstr "Открыть"
+
+msgid "Loyihani o'chirish"
+msgstr "Удалить проект"
+
+msgid "&quot;<strong>%(title)s</strong>&quot; loyihasini haqiqatan ham o'chirmoqchimisiz? Bu amal mijozlar katalogidan ham o'chirib yuboradi."
+msgstr "Вы действительно хотите удалить проект &quot;<strong>%(title)s</strong>&quot;? Он также исчезнет из каталога клиентов."
+
+msgid "Bekor qilish"
+msgstr "Отмена"
+
+msgid "Ha, o'chirish"
+msgstr "Да, удалить"
+
+msgid "Hozircha loyihalar topilmadi"
+msgstr "Проекты пока не найдены"
+
+msgid "Qidiruv bo'yicha hech qanday natija yo'q yoki hali yangi loyiha qo'shmagansiz."
+msgstr "По вашему запросу ничего не найдено, либо вы ещё не добавили новый проект."
+
+msgid "Yangi loyiha yaratish"
+msgstr "Создать новый проект"
+
+msgid "Hali baho yo'q"
+msgstr "Оценок пока нет"
+
+msgid "Shkaf"
+msgstr "Шкаф"
+
+msgid "Stol"
+msgstr "Стол"
+
+msgid "Oshxona mebeli"
+msgstr "Кухонная мебель"
+
+msgid "Krovat"
+msgstr "Кровать"
+
+msgid "Komod"
+msgstr "Комод"
+
+msgid "Tumbochka"
+msgstr "Тумба"

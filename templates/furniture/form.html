@@ -5,46 +5,29 @@
 
 {% block content %}
 
-<!-- Three.js va OrbitControls -->
+<!-- Three.js va OrbitControls kutubxonalarini ulash -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-<style>
-    /* Glassmorphism (Shisha effekti) */
-    .glass-card {
-        background: rgba(255, 255, 255, 0.75) !important;
-        backdrop-filter: blur(14px) !important;
-        -webkit-backdrop-filter: blur(14px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.6) !important;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08) !important;
-        border-radius: 20px !important;
-    }
-</style>
-
 <div class="container-fluid py-3">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold m-0 text-primary">Loyihani tahrirlash</h3>
-        <small class="text-muted">Loyihangizni o'zgartiring va yangilang</small>
-    </div>
+    <h3 class="fw-bold mb-4 text-primary">Loyihani tahrirlash: {{ project.title }}</h3>
 
-    <form method="post" id="furnitureForm" enctype="multipart/form-data">
+    <form method="post">
         {% csrf_token %}
         <div class="row g-4 align-items-stretch">
             
-            <!-- CHAP TARAFI: Parametrlar paneli -->
-            <div class="col-lg-5 col-md-6 d-flex">
-                <div class="card glass-card p-4 w-100 h-100 d-flex flex-column justify-content-between">
+            <!-- Chap tomon: Forma va parametrlar -->
+            <div class="col-md-5 d-flex">
+                <div class="card custom-card p-4 w-100 h-100 d-flex flex-column justify-content-between bg-white shadow-sm border-0 rounded-4">
                     <div>
-                        <!-- Loyiha nomi -->
                         <div class="mb-3">
-                            <label class="form-label fw-bold small text-secondary">Loyiha nomi</label>
-                            <input type="text" name="title" id="titleInput" class="form-control form-control-custom" value="{{ form.title.value|default:project.title|default:project.name }}" required>
-                            <input type="hidden" name="name" id="nameHiddenInput" value="{{ form.name.value|default:project.name|default:project.title }}">
+                            <label class="form-label fw-bold text-secondary small">Loyiha nomi</label>
+                            <input type="text" name="title" id="titleInput" class="form-control form-control-custom" value="{{ form.title.value|default:project.title }}" required>
                         </div>
 
-                        <!-- Mebel turi -->
+                        <!-- Mebel turi tanlash -->
                         <div class="mb-3">
-                            <label class="form-label fw-bold small text-secondary">Mebel turi</label>
+                            <label class="form-label fw-bold text-secondary small">Mebel turi</label>
                             <select id="furnitureTypeSelect" name="furniture_type" class="form-select form-control-custom">
                                 <option value="Shkaf" {% if form.furniture_type.value == 'Shkaf' or project.furniture_type == 'Shkaf' %}selected{% endif %}>Shkaf</option>
                                 <option value="Stol" {% if form.furniture_type.value == 'Stol' or project.furniture_type == 'Stol' %}selected{% endif %}>Stol</option>
@@ -55,20 +38,16 @@
                             </select>
                         </div>
 
-                        <!-- Mebel o'lchamlari (sm) -->
+                        <!-- O'lchamlar bo'limi -->
                         <h6 class="fw-bold mt-4 mb-2 text-primary">1. Mebel o'lchamlari (sm)</h6>
                         <div class="row g-2 mb-2" id="dimensions-container">
                             <div class="col-6" id="field-width-box">
-                                <label class="form-label small text-muted" id="label-width">Mebel Eni (sm)</label>
+                                <label class="form-label small text-muted" id="label-width">Kengligi (Eni sm)</label>
                                 <input type="number" step="1" name="width" id="widthInput" class="form-control form-control-custom" value="{{ form.width.value|default:project.width|default:160 }}">
                             </div>
                             <div class="col-6" id="field-height-box">
-                                <label class="form-label small text-muted" id="label-height">Mebel Balandligi (sm)</label>
+                                <label class="form-label small text-muted" id="label-height">Balandligi (sm)</label>
                                 <input type="number" step="1" name="height" id="heightInput" class="form-control form-control-custom" value="{{ form.height.value|default:project.height|default:220 }}">
-                            </div>
-                            <div class="col-6" id="field-length-box">
-                                <label class="form-label small text-muted" id="label-length">Kengligi (Eni sm)</label>
-                                <input type="number" step="1" name="length" id="lengthInput" class="form-control form-control-custom" value="{{ form.length.value|default:project.length|default:0 }}">
                             </div>
                             <div class="col-6" id="field-depth-box">
                                 <label class="form-label small text-muted" id="label-depth">Chuqurligi (sm)</label>
@@ -76,60 +55,26 @@
                             </div>
                         </div>
 
-                        <!-- Taxta o'lchami va narxi -->
                         <h6 class="fw-bold mt-4 mb-2 text-success">2. Taxta (List) o'lchami va Narxi</h6>
                         <div class="row g-2 mb-2">
                             <div class="col-6">
                                 <label class="form-label small text-muted">1 ta List Eni (m)</label>
-                                <input type="number" step="0.01" name="board_width" id="boardWidthInput" class="form-control form-control-custom" value="{{ form.board_width.value|default:project.board_width|default:2.75 }}">
+                                <input type="number" step="0.01" id="boardWidthInput" class="form-control form-control-custom" value="2.75">
                             </div>
                             <div class="col-6">
                                 <label class="form-label small text-muted">1 ta List Bo'yi (m)</label>
-                                <input type="number" step="0.01" name="board_height" id="boardHeightInput" class="form-control form-control-custom" value="{{ form.board_height.value|default:project.board_height|default:1.83 }}">
+                                <input type="number" step="0.01" id="boardHeightInput" class="form-control form-control-custom" value="1.83">
                             </div>
                         </div>
+
                         <div class="row g-2 mb-3">
                             <div class="col-6">
                                 <label class="form-label small text-muted">1 ta List narxi (so'm)</label>
-                                <input type="number" step="1000" name="single_board_price" id="singleBoardPriceInput" class="form-control form-control-custom fw-bold border-primary" value="{{ form.single_board_price.value|default:project.single_board_price|default:250000 }}">
+                                <input type="number" step="1000" id="singleBoardPriceInput" class="form-control form-control-custom fw-bold border-primary" value="250000">
                             </div>
                             <div class="col-6">
                                 <label class="form-label small fw-bold text-dark">Ketgan list soni (ta)</label>
-                                <input type="number" step="0.1" name="board_count" id="boardCountInput" class="form-control form-control-custom fw-bold border-success" value="{{ form.board_count.value|default:project.board_count|default:2 }}">
-                            </div>
-                        </div>
-
-                        <!-- Detallar -->
-                        <div id="details-section">
-                            <h6 class="fw-bold mt-4 mb-2 text-dark">Detallar va Material</h6>
-                            <div class="row g-2 mb-2">
-                                <div class="col-6">
-                                    <label class="form-label small text-muted">Eshiklar soni</label>
-                                    <input type="number" name="doors_count" class="form-control form-control-custom" value="{{ form.doors_count.value|default:project.doors_count|default:2 }}">
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label small text-muted">Tokchalar / Tortmalar</label>
-                                    <input type="number" name="shelves_count" class="form-control form-control-custom" value="{{ form.shelves_count.value|default:project.shelves_count|default:3 }}">
-                                </div>
-                            </div>
-
-                            <div class="row g-2 mb-3">
-                                <div class="col-6">
-                                    <label class="form-label small text-muted">Material</label>
-                                    <select name="material" class="form-select form-control-custom">
-                                        <option value="MDF" {% if form.material.value == 'MDF' or project.material == 'MDF' %}selected{% endif %}>MDF</option>
-                                        <option value="LSP" {% if form.material.value == 'LSP' or project.material == 'LSP' %}selected{% endif %}>DSP / LDSP</option>
-                                        <option value="Yog'och" {% if form.material.value == "Yog'och" or project.material == "Yog'och" %}selected{% endif %}>Tabiiy yog'och</option>
-                                    </select>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label small text-muted">Qalinligi</label>
-                                    <select name="thickness" class="form-select form-control-custom">
-                                        <option value="16 mm" {% if form.thickness.value == '16 mm' or project.thickness == '16 mm' %}selected{% endif %}>16 mm</option>
-                                        <option value="18 mm" {% if form.thickness.value == '18 mm' or project.thickness == '18 mm' or not form.thickness.value %}selected{% endif %}>18 mm</option>
-                                        <option value="22 mm" {% if form.thickness.value == '22 mm' or project.thickness == '22 mm' %}selected{% endif %}>22 mm</option>
-                                    </select>
-                                </div>
+                                <input type="number" step="0.1" name="board_count" id="boardCountInput" class="form-control form-control-custom fw-bold border-success" value="2">
                             </div>
                         </div>
 
@@ -137,18 +82,12 @@
                         <h6 class="fw-bold mt-3 mb-2 text-dark">Rang / Tekstura</h6>
                         <div class="mb-3">
                             <input type="hidden" name="color" id="selectedColorInput" value="{{ form.color.value|default:project.color|default:'' }}">
-                            <input type="hidden" name="area" id="areaInput" value="{{ form.area.value|default:project.area|default:0 }}">
-                            <input type="hidden" name="total_area" id="totalAreaInput" value="{{ form.total_area.value|default:project.total_area|default:0 }}">
-                            <input type="hidden" name="price_per_sqm" id="pricePerSqmInput" value="{{ form.price_per_sqm.value|default:project.price_per_sqm|default:0 }}">
+                            <input type="hidden" name="estimated_price" id="estimatedPriceHidden" value="0">
 
                             <div class="row g-2 p-2 border rounded-3 bg-light" style="max-height: 180px; overflow-y: auto;" id="texture-selector-container">
                                 {% for color in available_colors %}
                                 <div class="col-4">
-                                    <div class="texture-card border rounded-2 p-2 text-center" 
-                                         data-color-id="{{ color.id }}" 
-                                         data-color-url="{{ color.image.url }}" 
-                                         data-color-name="{{ color.name }}" 
-                                         style="cursor: pointer; transition: all 0.2s;">
+                                    <div class="texture-card border rounded-2 p-2 text-center" data-color-id="{{ color.id }}" data-color-url="{{ color.image.url }}" data-color-name="{{ color.name }}" style="cursor: pointer; transition: all 0.2s;">
                                         <div style="width: 100%; aspect-ratio: 1 / 1; background-image: url('{{ color.image.url }}'); background-size: cover; background-position: center;" class="rounded-1 mb-1 border"></div>
                                         <span class="d-block text-truncate text-dark fw-medium" style="font-size: 10px;">{{ color.name }}</span>
                                     </div>
@@ -166,23 +105,23 @@
                 </div>
             </div>
 
-            <!-- O'NG TARAFI: 3D Interaktiv Vizualizatsiya va Narx -->
-            <div class="col-lg-7 col-md-6 d-flex flex-column">
-                <div class="card glass-card p-4 text-center justify-content-center align-items-center position-relative mb-3 flex-grow-1" style="min-height: 440px; overflow: hidden;">
-                    <!-- THREE.JS CANVAS CONTAINER -->
+            <!-- O'ng tomon: 3D Render va Hisob-kitob -->
+            <div class="col-md-7 d-flex flex-column">
+                <div class="card custom-card p-4 text-center justify-content-center align-items-center position-relative mb-3 flex-grow-1 border-0 shadow-sm rounded-4" style="min-height: 440px; background-color: #f7f5f2; overflow: hidden;">
+                    <!-- THREE.JS 3D CANVAS -->
                     <div id="threejs-container" class="w-100 h-100 position-relative" style="min-height: 360px; cursor: grab;"></div>
                     
                     <div id="dimension-info" class="mt-2 p-2 bg-white rounded-pill shadow-sm border d-inline-block px-3 position-absolute bottom-0 mb-3">
-                        <span class="text-secondary small">Mebel: <strong id="val-type">Shkaf</strong> | O'lchamlari: <strong id="val-dimensions">160 x 220 x 60</strong> sm | Rang: <strong id="val-color">-</strong></span>
+                        <span class="text-secondary small">Mebel: <strong id="val-type">{{ project.furniture_type|default:"Shkaf" }}</strong> | O'lchamlari: <strong id="val-dimensions">{{ project.width|default:160 }} x {{ project.height|default:220 }} x {{ project.depth|default:60 }}</strong> sm | Rang: <strong id="val-color">{{ project.color|default:"-" }}</strong></span>
                     </div>
                 </div>
 
-                <div class="card glass-card p-4">
+                <div class="card custom-card p-4 border-0 shadow-sm rounded-4">
                     <div class="row align-items-center">
                         <div class="col-8">
                             <span class="text-muted small d-block mb-1">Ketgan taxta: <strong id="show-board-count" class="text-primary">0</strong> ta list</span>
                             <span class="text-muted small d-block mb-2">Jami sarflangan yuzasi: <strong id="show-total-area" class="text-dark">0</strong> kv.m</span>
-                            <h3 class="fw-bold mb-0 text-success"><span id="total-price">0</span> so'm</h3>
+                            <h3 class="fw-bold mb-0 text-success"><span id="total-price">{{ project.estimated_price|default:0 }}</span> so'm</h3>
                         </div>
                         <div class="col-4 text-end fs-1 text-primary">
                             <i class="bi bi-calculator"></i>
@@ -195,38 +134,24 @@
     </form>
 </div>
 
+<!-- JavaScript Logika va 3D Render -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const furnitureTypeSelect = document.getElementById("furnitureTypeSelect");
-    const titleInput = document.getElementById("titleInput");
-    const nameHiddenInput = document.getElementById("nameHiddenInput");
-    
-    if (titleInput && nameHiddenInput) {
-        titleInput.addEventListener("input", function() {
-            nameHiddenInput.value = this.value;
-        });
-    }
-
     const widthInput = document.getElementById("widthInput");
     const heightInput = document.getElementById("heightInput");
-    const lengthInput = document.getElementById("lengthInput");
     const depthInput = document.getElementById("depthInput");
     
     const labelWidth = document.getElementById("label-width");
     const labelHeight = document.getElementById("label-height");
-    const labelLength = document.getElementById("label-length");
     const labelDepth = document.getElementById("label-depth");
-    const fieldLengthBox = document.getElementById("field-length-box");
-    const fieldDepthBox = document.getElementById("field-depth-box");
     
     const boardWidthInput = document.getElementById("boardWidthInput");
     const boardHeightInput = document.getElementById("boardHeightInput");
     const singleBoardPriceInput = document.getElementById("singleBoardPriceInput");
     const boardCountInput = document.getElementById("boardCountInput");
     const colorInput = document.getElementById("selectedColorInput");
-    const areaInput = document.getElementById("areaInput");
-    const totalAreaInput = document.getElementById("totalAreaInput");
-    const pricePerSqmInput = document.getElementById("pricePerSqmInput");
+    const estimatedPriceHidden = document.getElementById("estimatedPriceHidden");
     
     const valType = document.getElementById("val-type");
     const valDimensions = document.getElementById("val-dimensions");
@@ -236,45 +161,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const showTotalAreaEl = document.getElementById("show-total-area");
 
     const furnitureConfig = {
-        "Stol": {
-            labels: { width: "Stol Uzunligi (sm)", height: "Stol Balandligi (sm)", length: "Stol Kengligi (Eni sm)" },
-            showLength: true,
-            showDepth: false,
-            defaultValues: { width: 140, height: 75, length: 80, depth: 0 }
-        },
-        "Shkaf": {
-            labels: { width: "Shkaf Kengligi (Eni sm)", height: "Shkaf Balandligi (sm)", depth: "Shkaf Chuqurligi (sm)" },
-            showLength: false,
-            showDepth: true,
-            defaultValues: { width: 160, height: 220, length: 0, depth: 60 }
-        },
-        "Oshxona mebeli": {
-            labels: { width: "Devor Uzunligi (sm)", height: "Umumiy Balandlik (sm)", depth: "Shkaf Chuqurligi (sm)" },
-            showLength: false,
-            showDepth: true,
-            defaultValues: { width: 280, height: 210, length: 0, depth: 60 }
-        },
-        "Krovat": {
-            labels: { width: "Yotoq Kengligi (sm)", height: "Boshqismi Balandligi (sm)", length: "Yotoq Uzunligi (sm)" },
-            showLength: true,
-            showDepth: false,
-            defaultValues: { width: 160, height: 90, length: 200, depth: 0 }
-        },
-        "Komod": {
-            labels: { width: "Komod Eni (sm)", height: "Balandligi (sm)", depth: "Chuqurligi (sm)" },
-            showLength: false,
-            showDepth: true,
-            defaultValues: { width: 90, height: 100, length: 0, depth: 45 }
-        },
-        "Tumbochka": {
-            labels: { width: "Tumbochka Eni (sm)", height: "Balandligi (sm)", depth: "Chuqurligi (sm)" },
-            showLength: false,
-            showDepth: true,
-            defaultValues: { width: 50, height: 55, length: 0, depth: 40 }
-        }
+        "Stol": { labels: { width: "Stol Uzunligi (sm)", height: "Stol Balandligi (sm)", depth: "Stol Kengligi (sm)" } },
+        "Shkaf": { labels: { width: "Shkaf Kengligi (sm)", height: "Shkaf Balandligi (sm)", depth: "Shkaf Chuqurligi (sm)" } },
+        "Oshxona mebeli": { labels: { width: "Devor Uzunligi (sm)", height: "Umumiy Balandlik (sm)", depth: "Chuqurligi (sm)" } },
+        "Krovat": { labels: { width: "Yotoq Kengligi (sm)", height: "Boshqismi Balandligi (sm)", depth: "Yotoq Uzunligi (sm)" } },
+        "Komod": { labels: { width: "Komod Eni (sm)", height: "Balandligi (sm)", depth: "Chuqurligi (sm)" } },
+        "Tumbochka": { labels: { width: "Tumbochka Eni (sm)", height: "Balandligi (sm)", depth: "Chuqurligi (sm)" } }
     };
 
-    // THREE.JS ИНИЦИАЛИЗАЦИЯ
+    // --- THREE.JS SAHNA VA KAMERA ---
     const container = document.getElementById('threejs-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf7f5f2);
@@ -285,28 +180,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-    scene.add(ambientLight);
-
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.85);
     dirLight.position.set(120, 220, 150);
-    dirLight.castShadow = true;
     scene.add(dirLight);
-
-    const planeGeo = new THREE.PlaneGeometry(500, 500);
-    const planeMat = new THREE.ShadowMaterial({ opacity: 0.1 });
-    const plane = new THREE.Mesh(planeGeo, planeMat);
-    plane.rotation.x = -Math.PI / 2;
-    plane.position.y = -80;
-    plane.receiveShadow = true;
-    scene.add(plane);
 
     const furnitureGroup = new THREE.Group();
     scene.add(furnitureGroup);
@@ -315,35 +197,24 @@ document.addEventListener("DOMContentLoaded", function () {
     let textureLoader = new THREE.TextureLoader();
 
     let selectedTextureUrl = "";
-    let selectedTextureName = "";
+    let selectedTextureName = "{{ project.color|default:'' }}";
 
-    const initialColorVal = colorInput ? colorInput.value : "";
     const textureCards = document.querySelectorAll(".texture-card");
     
     if (textureCards.length > 0) {
-        let matched = false;
+        let matchedCard = null;
         textureCards.forEach(card => {
-            const cId = card.getAttribute("data-color-id");
-            const cName = card.getAttribute("data-color-name");
-            const cUrl = card.getAttribute("data-color-url");
-
-            if (initialColorVal && (initialColorVal === cId || initialColorVal === cName)) {
-                card.style.border = "2px solid #5c4033";
-                selectedTextureUrl = cUrl;
-                selectedTextureName = cName;
-                matched = true;
-                applyTexture(selectedTextureUrl);
+            if (card.getAttribute("data-color-name") === selectedTextureName) {
+                matchedCard = card;
             }
         });
-
-        if (!matched && textureCards[0]) {
-            const firstCard = textureCards[0];
-            firstCard.style.border = "2px solid #5c4033";
-            selectedTextureUrl = firstCard.getAttribute("data-color-url");
-            selectedTextureName = firstCard.getAttribute("data-color-name");
-            if (colorInput) colorInput.value = firstCard.getAttribute("data-color-id") || selectedTextureName;
-            applyTexture(selectedTextureUrl);
-        }
+        if (!matchedCard) matchedCard = textureCards[0];
+        
+        matchedCard.style.border = "2px solid #5c4033";
+        selectedTextureUrl = matchedCard.getAttribute("data-color-url");
+        selectedTextureName = matchedCard.getAttribute("data-color-name");
+        if (colorInput) colorInput.value = selectedTextureName;
+        applyTexture(selectedTextureUrl);
     }
 
     textureCards.forEach(card => {
@@ -352,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function () {
             this.style.border = "2px solid #5c4033";
             selectedTextureUrl = this.getAttribute("data-color-url");
             selectedTextureName = this.getAttribute("data-color-name");
-            if (colorInput) colorInput.value = this.getAttribute("data-color-id") || selectedTextureName;
+            if (colorInput) colorInput.value = selectedTextureName;
             applyTexture(selectedTextureUrl);
         });
     });
@@ -368,113 +239,43 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function handleFurnitureTypeChange() {
+    function updateLabels() {
         const type = furnitureTypeSelect ? furnitureTypeSelect.value : "Shkaf";
         const config = furnitureConfig[type] || furnitureConfig["Shkaf"];
 
-        if (labelWidth) labelWidth.textContent = config.labels.width || "Uzunligi (sm)";
-        if (labelHeight) labelHeight.textContent = config.labels.height || "Balandligi (sm)";
-        if (labelLength) labelLength.textContent = config.labels.length || "Kengligi (sm)";
-        if (labelDepth) labelDepth.textContent = config.labels.depth || "Chuqurligi (sm)";
-
-        if (fieldLengthBox) fieldLengthBox.style.display = config.showLength ? "block" : "none";
-        if (fieldDepthBox) fieldDepthBox.style.display = config.showDepth ? "block" : "none";
+        if (labelWidth) labelWidth.textContent = config.labels.width;
+        if (labelHeight) labelHeight.textContent = config.labels.height;
+        if (labelDepth) labelDepth.textContent = config.labels.depth;
 
         updateFurnitureApp();
     }
 
     if (furnitureTypeSelect) {
-        furnitureTypeSelect.addEventListener("change", handleFurnitureTypeChange);
+        furnitureTypeSelect.addEventListener("change", updateLabels);
     }
 
-    function addBox(w, h, d, x, y, z, mat = woodMaterial) {
+    function addBox(w, h, d, x, y, z) {
         const geo = new THREE.BoxGeometry(w, h, d);
-        const mesh = new THREE.Mesh(geo, mat);
+        const mesh = new THREE.Mesh(geo, woodMaterial);
         mesh.position.set(x, y, z);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
         furnitureGroup.add(mesh);
         return mesh;
     }
 
-    function build3DFurniture(type, w, h, d, l) {
+    function build3DFurniture(w, h, d) {
         while(furnitureGroup.children.length > 0){ 
             furnitureGroup.remove(furnitureGroup.children[0]); 
         }
-
-        if (type === "Krovat") {
-            const bedW = Math.min(Math.max(w * 0.85, 140), 220);
-            const headH = Math.min(Math.max(h * 0.8, 70), 140);
-            const bedL = Math.min(Math.max(l * 0.75, 150), 240);
-            
-            const headThick = 10;
-            const frameH = 32;
-
-            addBox(bedW, headH, headThick, 0, headH / 2 - frameH / 2, -bedL / 2 + headThick / 2);
-            addBox(bedW - 4, frameH, bedL - headThick, 0, 0, headThick / 2);
-
-            const mattressMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9 });
-            addBox(bedW - 12, 24, bedL - headThick - 6, 0, frameH / 2 + 12, headThick / 2, mattressMat);
-
-            const pillowMat = new THREE.MeshStandardMaterial({ color: 0xf0e6de, roughness: 0.8 });
-            const pW = (bedW - 24) / 2.2;
-            const pL = 28;
-            addBox(pW, 9, pL, -pW / 2 - 4, frameH / 2 + 28, -bedL / 2 + headThick + pL / 2 + 8, pillowMat);
-            addBox(pW, 9, pL, pW / 2 + 4, frameH / 2 + 28, -bedL / 2 + headThick + pL / 2 + 8, pillowMat);
-
-            furnitureGroup.position.y = -frameH / 2;
-
-        } else if (type === "Stol") {
-            const tableW = Math.min(Math.max(w * 0.7, 80), 200);
-            const tableH = Math.min(Math.max(h * 0.8, 60), 120);
-            const tableL = Math.min(Math.max(l * 0.7, 60), 160);
-            const topThick = 6;
-            const legW = 6;
-
-            addBox(tableW, topThick, tableL, 0, tableH / 2 - topThick / 2, 0);
-
-            const legH = tableH - topThick;
-            const legY = -topThick / 2;
-            const offX = tableW / 2 - legW / 2 - 2;
-            const offZ = tableL / 2 - legW / 2 - 2;
-
-            addBox(legW, legH, legW, -offX, legY, -offZ);
-            addBox(legW, legH, legW, offX, legY, -offZ);
-            addBox(legW, legH, legW, -offX, legY, offZ);
-            addBox(legW, legH, legW, offX, legY, offZ);
-
-            furnitureGroup.position.y = 0;
-
-        } else if (type === "Oshxona mebeli") {
-            const kitchenW = Math.min(Math.max(w * 0.5, 120), 240);
-            const kitchenH = Math.min(Math.max(h * 0.5, 120), 200);
-            const kitchenD = Math.min(Math.max(d * 0.8, 50), 90);
-            
-            const bH = kitchenH * 0.45;
-            addBox(kitchenW, bH, kitchenD, 0, -kitchenH/2 + bH/2, 0);
-
-            const stoleshMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.3 });
-            addBox(kitchenW + 4, 6, kitchenD + 4, 0, -kitchenH/2 + bH + 3, 0, stoleshMat);
-
-            const tH = kitchenH * 0.38;
-            addBox(kitchenW, tH, kitchenD * 0.65, 0, kitchenH/2 - tH/2, -kitchenD * 0.15);
-
-            furnitureGroup.position.y = 0;
-
-        } else {
-            const W = Math.min(Math.max(w * 0.7, 60), 200);
-            const H = Math.min(Math.max(h * 0.6, 60), 220);
-            const D = Math.min(Math.max(d * 0.7, 40), 120);
-            addBox(W, H, D, 0, 0, 0);
-            furnitureGroup.position.y = 0;
-        }
+        const W = Math.min(Math.max(w * 0.7, 60), 200);
+        const H = Math.min(Math.max(h * 0.6, 60), 220);
+        const D = Math.min(Math.max(d * 0.7, 40), 120);
+        addBox(W, H, D, 0, 0, 0);
     }
 
     function updateFurnitureApp() {
         const type = furnitureTypeSelect ? furnitureTypeSelect.value : "Shkaf";
         const w = parseFloat(widthInput.value) || 160;
-        const h = parseFloat(heightInput.value) || 90;
-        const l = parseFloat(lengthInput.value) || 200;
+        const h = parseFloat(heightInput.value) || 220;
         const d = parseFloat(depthInput.value) || 60;
         
         const bW = parseFloat(boardWidthInput.value) || 2.75;
@@ -482,44 +283,29 @@ document.addEventListener("DOMContentLoaded", function () {
         const singlePrice = parseFloat(singleBoardPriceInput.value) || 250000;
 
         const singleBoardArea = bW * bH;
-        let estimatedSurfaceArea = 0;
-
-        if (type === "Stol") {
-            let wM = w / 100, hM = h / 100, lM = l / 100;
-            estimatedSurfaceArea = (wM * lM * 2) + (hM * lM * 2) + (hM * 0.1 * 4);
-        } else if (type === "Krovat") {
-            let wM = w / 100, hM = h / 100, lM = l / 100;
-            estimatedSurfaceArea = (wM * lM) + (wM * hM) + (lM * 0.4 * 2);
-        } else {
-            let wM = w / 100, hM = h / 100, dM = d / 100;
-            estimatedSurfaceArea = (2 * (wM * hM + wM * dM + hM * dM)) * 1.5;
-        }
+        let estimatedSurfaceArea = (2 * ((w/100)*(h/100) + (w/100)*(d/100) + (h/100)*(d/100))) * 1.5;
 
         let totalRequiredArea = estimatedSurfaceArea * 1.15;
         let calculatedBoardCount = singleBoardArea > 0 ? Math.ceil((totalRequiredArea / singleBoardArea) * 10) / 10 : 1;
 
-        if (boardCountInput && document.activeElement !== boardCountInput) boardCountInput.value = calculatedBoardCount;
+        if (boardCountInput && document.activeElement !== boardCountInput && !boardCountInput.value) {
+            boardCountInput.value = calculatedBoardCount;
+        }
         const boardCount = parseFloat(boardCountInput.value) || calculatedBoardCount;
         const totalArea = singleBoardArea * boardCount;
-        const pricePerSqm = singleBoardArea > 0 ? (singlePrice / singleBoardArea) : 0;
 
-        if (areaInput) areaInput.value = totalArea.toFixed(2);
-        if (totalAreaInput) totalAreaInput.value = totalArea.toFixed(2);
-        if (pricePerSqmInput) pricePerSqmInput.value = Math.round(pricePerSqm);
         if (showBoardCountEl) showBoardCountEl.textContent = boardCount;
         if (showTotalAreaEl) showTotalAreaEl.textContent = totalArea.toFixed(2);
 
         let totalPrice = Math.round(boardCount * singlePrice);
         if (totalPriceElement) totalPriceElement.textContent = totalPrice.toLocaleString('uz-UZ');
+        if (estimatedPriceHidden) estimatedPriceHidden.value = totalPrice;
+
         if (valType) valType.textContent = type;
         if (valColor) valColor.textContent = selectedTextureName || "-";
+        if (valDimensions) valDimensions.textContent = `${w} x ${h} x ${d}`;
 
-        if (valDimensions) {
-            if (type === "Stol" || type === "Krovat") valDimensions.textContent = `${w} x ${h} x ${l}`;
-            else valDimensions.textContent = `${w} x ${h} x ${d}`;
-        }
-
-        build3DFurniture(type, w, h, d, l);
+        build3DFurniture(w, h, d);
     }
 
     function animate() {
@@ -529,20 +315,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     animate();
 
-    window.addEventListener('resize', function() {
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
-    });
-
-    [widthInput, heightInput, lengthInput, depthInput, boardWidthInput, boardHeightInput, singleBoardPriceInput, boardCountInput].forEach(input => {
+    [widthInput, heightInput, depthInput, boardWidthInput, boardHeightInput, singleBoardPriceInput, boardCountInput].forEach(input => {
         if (input) {
             input.addEventListener("input", updateFurnitureApp);
             input.addEventListener("change", updateFurnitureApp);
         }
     });
 
-    handleFurnitureTypeChange();
+    updateLabels();
 });
 </script>
 {% endblock %}

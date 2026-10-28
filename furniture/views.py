@@ -17,30 +17,77 @@ from .models import Project, Material, ProjectImage, MdfColor, Review, ProjectRe
 
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.db.models import Q
+from django.views.decorators.http import require_POST
+from functools import wraps
+from django.conf import settings
 
 
-# 1. Tizimga kirish (Login)
+
+def maker_required(view_func):
+    @login_required
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        u = request.user
+        is_maker = hasattr(u, 'userprofile') and u.userprofile.role == 'maker'
+        if u.is_superuser or u.is_staff or is_maker:
+            return view_func(request, *args, **kwargs)
+        messages.error(request, "Bu sahifa faqat mebelchilar uchun!")
+        return redirect('home')  # ochiq sahifa: redirect aylanishi bo'lmaydi
+    return wrapper
+
+
+
+
+
+
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
+
         user = authenticate(request, username=username, password=password)
         if user is not None:
             if hasattr(user, 'userprofile') and user.userprofile.role == 'maker':
                 messages.error(request, "Mebelchilar uchun alohida kirish sahifasi mavjud!")
                 return redirect('maker_login')
-            
+
             login(request, user)
-            
-            # Mijoz tizimga kirishi bilan to'g'ridan-to'g'ri Tayyor loyihalar sahifasiga yo'naltiriladi:
+
+            # Mijoz kirishi bilan Tayyor loyihalar sahifasiga yo'naltiriladi:
             return redirect('client_projects')
         else:
             messages.error(request, "Login yoki parol xato!")
-            
+
     return render(request, 'furniture/login.html')
 
 
+def maker_login_view(request):
+    # Sahifaga shunchaki kirilsa (GET), eski seansni tozalaymiz:
+    if request.method == 'GET':
+        logout(request)
+        return render(request, 'furniture/login.html')
+
+    # Login va parol kiritilib, tugma bosilganda (POST):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        # Mebelchi yoki admin ekanligini tekshiramiz
+        is_maker = hasattr(user, 'userprofile') and user.userprofile.role == 'maker'
+
+        if user.is_superuser or user.is_staff or is_maker:
+            login(request, user)
+            # Muvaffaqiyatli kirsa, create_project sahifasiga yo'naltiramiz:
+            return redirect('create_project')
+        else:
+            messages.error(request, "Xatolik: Bu sahifa faqat mebelchilar uchun!")
+    else:
+        messages.error(request, "Login yoki parol xato!")
+
+    return render(request, 'furniture/login.html')
 
 def register_view(request):
     if request.method == 'POST':
@@ -100,39 +147,6 @@ def register_view(request):
 
 
 
-def maker_login_view(request):
-    # Agar foydalanuvchi sahifaga shunchaki kirsa (GET so'rovi),
-    # avvalgi eski seansni tozalaymiz (har safar login/parol so'rashi uchun):
-    if request.method == 'GET':
-        logout(request)
-        return render(request, 'furniture/login.html')
-
-    # Login va parol kiritilib, tugma bosilganda (POST so'rovi):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            # Mebelchi yoki admin ekanligini tekshiramiz
-            is_maker = hasattr(user, 'userprofile') and user.userprofile.role == 'maker'
-            
-            if user.is_superuser or user.is_staff or is_maker:
-                login(request, user)
-                # Muvaffaqiyatli kirsa, SRAZU create_project sahifasiga yo'naltiramiz:
-                return redirect('create_project')
-            else:
-                messages.error(request, "Xatolik: Bu sahifa faqat mebelchilar uchun!")
-        else:
-            messages.error(request, "Login yoki parol xato!")
-            
-    return render(request, 'furniture/login.html')
-
-
-
-
-
-
 
 
 def verify_code_view(request):
@@ -172,16 +186,17 @@ def verify_code_view(request):
 
 @login_required
 def mebelchi_dashboard(request):
-    # Faqat tizimga kirgan mebelchining loyihalarini olamiz
-    projects = FurnitureProject.objects.filter(user=request.user)
-    
+    # Bazadagi barcha loyihalarni olamiz
+    projects = FurnitureProject.objects.all().order_by('-created_at')
+
     context = {
         'projects': projects
     }
-    # Agar shablon 'seller' papkasi ichida bo'lsa:
-    return render(request, 'furniture/seller/mebelchi_dashboard.html', context)
+    # Mebelchi uchun ham aynan 'client_projects.html' sahifasini ochamiz
+    return render(request, 'furniture/client_projects.html', context)
 
-TELEGRAM_BOT_TOKEN = "8761510532:AAFqTMcrITswIM1sFOfPatEPHSw2RifdB5k"  # Tokeningiz to'g'ri yozildi
+
+TELEGRAM_BOT_TOKEN = getattr(settings, 'TELEGRAM_BOT_TOKEN', '')  # settings.py / .env dan olinadi
 
 def send_telegram_message(chat_id, text, reply_markup=None):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
@@ -296,11 +311,11 @@ def password_reset_view(request):
 
 
 # 8. Tizimdan chiqish (Logout)
+@login_required
 def logout_view(request):
     logout(request)
-    messages.success(request, "Tizimdan muvaffaqiyatli chiqdingiz!")
+    messages.success(request, "Tizimdan chiqdingiz.")
     return redirect('login')
-
 
 def my_view(request):
     return render(request, 'chap_nav.html')
@@ -313,7 +328,8 @@ def dashboard_view(request):
 
 # 4. Yangi loyiha yaratish
 
-@login_required
+
+@maker_required
 def create_project_view(request):
     if request.method == 'POST':
         data = request.POST.copy()
@@ -359,63 +375,73 @@ def create_project_view(request):
     available_colors = MdfColor.objects.all().order_by('-id')
     return render(request, 'furniture/create_project.html', {'form': form, 'available_colors': available_colors})
 
-
-@login_required
+@maker_required
 def edit_project_view(request, pk):
-    project = get_object_or_404(FurnitureProject, pk=pk, user=request.user)
-    
+    # Mebelchilar umumiy akkaunt bilan kirgani uchun user sharti yo'q
+    project = get_object_or_404(FurnitureProject, pk=pk)
+
     if request.method == 'POST':
         data = request.POST.copy()
-        
+
+        # HTML dagi nomlarni Django formasi kutayotgan nomlarga moslaymiz
         if 'name' in data and not data.get('title'):
             data['title'] = data['name']
         if 'area' in data and not data.get('square_meters'):
             data['square_meters'] = data['area']
         if 'price_per_sqm' in data and not data.get('price_per_unit'):
             data['price_per_unit'] = data['price_per_sqm']
-            
+
         if not data.get('material'):
             data['material'] = 'MDF'
         if not data.get('thickness'):
             data['thickness'] = '18 mm'
 
         form = FurnitureProjectForm(data, request.FILES, instance=project)
-        if form.is_valid():  
+        if form.is_valid():
             project = form.save(commit=False)
-            
-            board_count = float(data.get('board_count') or 1)
-            single_price = float(data.get('single_board_price') or 250000)
-            project.estimated_price = board_count * single_price
-            
-            sq_m = float(data.get('square_meters') or 0)
-            if hasattr(project, 'square_meters'):
-                project.square_meters = sq_m
+
+            # Narxni faqat formadan board_count yoki single_board_price kelganda qayta hisoblaymiz
+            if data.get('board_count') or data.get('single_board_price'):
+                board_count = float(data.get('board_count') or 1)
+                single_price = float(data.get('single_board_price') or 250000)
+                project.estimated_price = board_count * single_price
+
+            sq_m = data.get('square_meters') or data.get('area')
+            if sq_m:
+                project.square_meters = float(sq_m)
 
             project.save()
+            messages.success(request, "Loyiha muvaffaqiyatli tahrirlandi!")
             return redirect('my_projects')
         else:
             print("EDIT FORM ERRORS:", form.errors)
     else:
         form = FurnitureProjectForm(instance=project)
-        
+
     available_colors = MdfColor.objects.all().order_by('-id')
+
     return render(
-        request, 'furniture/form.html', {'form': form, 'edit_mode': True, 'project': project, 'available_colors': available_colors}
+        request, 'furniture/edit_project.html',
+        {'form': form, 'project': project, 'available_colors': available_colors}
     )
     
     
+    
+    
 # 7. Loyihani o'chirish (Delete)
-@login_required
+
+@maker_required
+@require_POST
 def delete_project_view(request, pk):
-  project = get_object_or_404(FurnitureProject, pk=pk, user=request.user)
-  if request.method == 'POST':
-    project.delete()
+    # Mebelchilar umumiy akkaunt bilan kirgani uchun user sharti yo'q
+    project = get_object_or_404(FurnitureProject, pk=pk)
+    project.delete()  # Bazadan va mijozlar katalogidan butunlay o'chadi
+    messages.success(request, "Loyiha muvaffaqiyatli o'chirildi.")
     return redirect('my_projects')
-  return render(request, 'furniture/delete_confirm.html', {'project': project})
 
 
 
-@login_required
+@maker_required
 def manage_materials(request):
     query = request.GET.get('q', '').strip()
     textures = MaterialTexture.objects.all().order_by('-id')
@@ -433,7 +459,8 @@ def manage_materials(request):
             
     return render(request, 'furniture/materials.html', {'textures': textures, 'form': form, 'query': query})
 
-@login_required
+
+@maker_required
 def manage_colors(request):
     query = request.GET.get('q', '').strip()
     colors = MdfColor.objects.all().order_by('-id')
@@ -452,8 +479,7 @@ def manage_colors(request):
     return render(request, 'furniture/colors.html', {'colors': colors, 'form': form, 'query': query})
 
 
-
-@login_required
+@maker_required
 def delete_material(request, pk):
     material = get_object_or_404(MaterialTexture, pk=pk) # yoki Material model nomi
     material.delete()
@@ -461,33 +487,56 @@ def delete_material(request, pk):
 
 
 
-
-@login_required
+@maker_required
 def delete_color(request, pk):
-    color = MdfColor.objects.get(pk=pk)
+    color = get_object_or_404(MdfColor, pk=pk)
     color.delete()
     return redirect('manage_colors')
 
+
+
 @login_required
 def project_detail_view(request, pk):
-    # Faqat shu foydalanuvchiga tegishli loyihani qidirib topamiz
-    project = get_object_or_404(FurnitureProject, pk=pk, user=request.user)
-    
+    # Har qanday foydalanuvchi (mijoz yoki mebelchi) loyihani ko'ra olishi uchun user sharti olib tashlandi
+    project = get_object_or_404(FurnitureProject, pk=pk)
+    reviews = project.reviews.all().order_by('-created_at')
+
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment', '').strip()
+
+        try:
+            rating_value = min(5, max(1, int(rating))) if rating else 5
+        except (TypeError, ValueError):
+            rating_value = 5
+
+        if rating or comment:
+            ProjectReview.objects.create(
+                project=project,
+                user=request.user,
+                rating=rating_value,
+                comment=comment if comment else "Izoh qoldirilmadi"
+            )
+            messages.success(request, "Sharhingiz muvaffaqiyatli saqlandi!")
+            return redirect('project_detail', pk=project.pk)
+
     context = {
-        'project': project
+        'project': project,
+        'reviews': reviews,
     }
     return render(request, 'furniture/project_detail.html', context)
 
-@login_required
+
+
+@maker_required
 def my_projects_view(request):
     query = request.GET.get('q', '').strip()
-    projects = FurnitureProject.objects.filter(user=request.user)
-    
+    projects = FurnitureProject.objects.all().order_by('-created_at')
+
     if query:
         projects = projects.filter(
             Q(title__icontains=query) | Q(furniture_type__icontains=query) | Q(material__icontains=query)
         )
-        
     return render(request, 'furniture/projects.html', {'projects': projects, 'query': query})
 
 
@@ -509,33 +558,9 @@ def client_catalog_view(request):
     return render(request, 'catalog_base.html', context)
 
 
-@login_required
-def project_detail_view(request, pk):
-    project = get_object_or_404(FurnitureProject, pk=pk)
-    reviews = project.reviews.all().order_by('-created_at')
 
-    if request.method == 'POST':
-        rating = request.POST.get('rating')
-        comment = request.POST.get('comment', '').strip()
 
-        # Baho yoki izoh kiritilgan bo'lsa, ProjectReview modeliga saqlaymiz
-        if rating or comment:
-            ProjectReview.objects.create(
-                project=project,
-                user=request.user,
-                rating=int(rating) if rating else 5,
-                comment=comment if comment else "Izoh qoldirilmadi"
-            )
-            messages.success(request, "Sharhingiz muvaffaqiyatli saqlandi!")
-            return redirect('project_detail', pk=project.pk)
-
-    context = {
-        'project': project,
-        'reviews': reviews,
-    }
-    return render(request, 'furniture/project_detail.html', context)
-
-@login_required
+@maker_required
 def craftsman_project_detail_view(request, pk):
     project = get_object_or_404(FurnitureProject, pk=pk)
     reviews = project.reviews.all().order_by('-created_at')
@@ -601,30 +626,20 @@ def client_materials_view(request):
         'query': query
     })
 
-
 def client_projects_view(request):
     query = request.GET.get('q', '').strip()
-    
-    # Tayyor loyihalarni olish
-    try:
-        projects = FurnitureProject.objects.all().order_by('-created_at')
-    except:
-        projects = FurnitureProject.objects.all().order_by('-id')
+    projects = FurnitureProject.objects.all().order_by('-created_at')
         
-    # Qidiruv mantigi (sarlavha yoki nom bo'yicha)
     if query:
-        # Loyiha modelida sarlavha 'title' yoki 'name' bo'lishiga qarab ikkalasini ham qidiradi
         projects = projects.filter(
-            Q(title__icontains=query) | Q(name__icontains=query)
-        ) if hasattr(FurnitureProject, 'title') and hasattr(FurnitureProject, 'name') else (
-            projects.filter(title__icontains=query) if hasattr(FurnitureProject, 'title') else projects.filter(name__icontains=query)
+            Q(title__icontains=query) | Q(furniture_type__icontains=query) | Q(material__icontains=query)
         )
         
     return render(request, 'furniture/client_projects.html', {
         'projects': projects,
         'query': query
     })
-
+    
 
 @login_required
 def toggle_favorite_view(request, pk):
@@ -634,6 +649,7 @@ def toggle_favorite_view(request, pk):
     else:
         project.favorites.add(request.user)
     return redirect(request.META.get('HTTP_REFERER', 'client_projects'))
+
 
 @login_required
 def favorite_projects_view(request):
@@ -653,6 +669,8 @@ def profile_edit_view(request):
         messages.success(request, "Profil ma'lumotlari muvaffaqiyatli yangilandi!")
         return redirect('profile_edit')
     return render(request, 'profile_edit.html')
+
+
 
 @login_required
 def password_change_view(request):
