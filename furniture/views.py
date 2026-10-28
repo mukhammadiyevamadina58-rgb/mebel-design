@@ -111,40 +111,27 @@ def register_view(request):
                 messages.error(request, "Xatolik: Bu telefon raqam allaqachon ro'yxatdan o'tgan!")
                 return render(request, 'furniture/register.html')
 
+        # Foydalanuvchini yaratamiz
         user = User.objects.create_user(
             username=username, 
             password=password, 
             first_name=name
         )
         
-        code = str(random.randint(100000, 999999))
-
+        # Profilni yaratamiz (kod talab qilinmaydi, is_verified=True)
         profile = UserProfile.objects.create(
             user=user, 
             phone=phone,
             role='client',
-            verification_code=code,
-            is_verified=False
+            is_verified=True
         )
 
-        request.session['pending_user_id'] = user.id
-
-        if getattr(profile, 'telegram_id', None):
-            send_telegram_message(
-                profile.telegram_id, 
-                f"Sizning tasdiqlash kodingiz: {code}\nKodni saytga kiriting."
-            )
-            messages.info(request, "Tasdiqlash kodi Telegram botingizga yuborildi.")
-        else:
-            messages.warning(
-                request, 
-                "Tasdiqlash kodini olish uchun iltimos Telegram botimizga kiring!"
-            )
-
-        return redirect('verify_code')
+        # Kod yubormasdan to'g'ridan-to'g'ri tizimga kirishamiz
+        login(request, user)
+        messages.success(request, f"Xush kelibsiz, {user.first_name}! Siz muvaffaqiyatli ro'yxatdan o'tdingiz.")
+        return redirect('client_projects')
 
     return render(request, 'furniture/register.html')
-
 
 
 
@@ -276,35 +263,77 @@ def telegram_webhook(request):
     return JsonResponse({'status': 'invalid method'}, status=405)
 
 def password_reset_view(request):
+    user_id = request.session.get('reset_user_id')
+    
     if request.method == 'POST':
-        phone = request.POST.get('phone')
-        
-        try:
-            # 1. Telefon raqam bo'yicha userni (profilni) topamiz
-            profile = UserProfile.objects.get(phone__icontains=phone[-9:])
-            user = profile.user
+        if not user_id:
+            # 1-qadam: Telefon raqam kiritilganda kod yuborish
+            phone = request.POST.get('phone')
             
-            # 2. Tasodifiy yangi parol generatsiya qilamiz
-            new_password = ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=8))
-            user.set_password(new_password)
-            user.save()
-            
-            # 3. Agar foydalanuvchi botga ulangan bo'lsa (telegram_id bo'lsa), Telegramga yuboramiz
-            if profile.telegram_id:
+            try:
+                profile = UserProfile.objects.get(phone__icontains=phone[-9:])
+                user = profile.user
+                
+                if not profile.telegram_id:
+                    messages.error(request, "Bu raqam egasi Telegram botimizga ulanmagan! Kod yuborib bo'lmaydi.")
+                    return redirect('password_reset')
+                
+                # Tasdiqlash kodini generatsiya qilamiz
+                code = str(random.randint(100000, 999999))
+                profile.verification_code = code
+                profile.save()
+                
+                request.session['reset_user_id'] = user.id
+                
+                # Telegramga kodni yuboramiz
                 send_telegram_message(
                     profile.telegram_id,
-                    f"Assalomu alaykum! Sizning yangi parolingiz: {new_password}\nIltimos, tizimga kirib parolni o'zgartiring."
+                    f"🔐 Parolni tiklash uchun tasdiqlash kodingiz: {code}\nUshbu kodni saytga kiriting."
                 )
-                messages.success(request, "Yangi parol Telegram botingizga yuborildi!")
-            else:
-                messages.error(request, "Bu raqam egasi Telegram botimizga ulanmagan!")
+                messages.success(request, "Tasdiqlash kodi Telegram botingizga yuborildi.")
+                return redirect('password_reset')
                 
-        except UserProfile.DoesNotExist:
-            messages.error(request, "Bu telefon raqam tizimda topilmadi!")
+            except UserProfile.DoesNotExist:
+                messages.error(request, "Bu telefon raqam tizimda topilmadi!")
+                return redirect('password_reset')
+        else:
+            # 2-qadam: Kodni tekshirish va yangi parolni o'rnatish
+            input_code = request.POST.get('code')
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
             
-        return redirect('password_reset')
-        
-    return render(request, 'furniture/password_reset.html')
+            try:
+                user = User.objects.get(id=user_id)
+                profile = user.userprofile
+                
+                if profile.verification_code and profile.verification_code == input_code:
+                    if new_password != confirm_password:
+                        messages.error(request, "Xatolik: Yangi parollar bir xil emas!")
+                        return render(request, 'furniture/password_reset.html', {'step': 'verify'})
+                    
+                    user.set_password(new_password)
+                    user.save()
+                    
+                    profile.verification_code = None
+                    profile.save()
+                    
+                    del request.session['reset_user_id']
+                    messages.success(request, "Parolingiz muvaffaqiyatli o'zgartirildi! Endi yangi parol bilan kirishingiz mumkin.")
+                    return redirect('login')
+                else:
+                    messages.error(request, "Xatolik: Tasdiqlash kodi xato!")
+                    return render(request, 'furniture/password_reset.html', {'step': 'verify'})
+                    
+            except (User.DoesNotExist, UserProfile.DoesNotExist):
+                if 'reset_user_id' in request.session:
+                    del request.session['reset_user_id']
+                return redirect('password_reset')
+
+    context = {
+        'step': 'verify' if user_id else 'phone'
+    }
+    return render(request, 'furniture/password_reset.html', context)
+
 
 
 
@@ -313,9 +342,15 @@ def password_reset_view(request):
 # 8. Tizimdan chiqish (Logout)
 @login_required
 def logout_view(request):
+    user = request.user
+    
+    # 1. Tizimdan chiqaramiz
     logout(request)
-    messages.success(request, "Tizimdan chiqdingiz.")
-    return redirect('login')
+    
+    user.delete()
+    
+    messages.success(request, "Akkauntingiz va ma'lumotlaringiz to'liq o'chirildi va tizimdan chiqdingiz.")
+    return redirect('register')  # Qaytadan ro'yxatdan o'tish sahifasiga yo'naltiramiz
 
 def my_view(request):
     return render(request, 'chap_nav.html')
