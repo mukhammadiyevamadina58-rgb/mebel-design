@@ -270,8 +270,13 @@ def password_reset_view(request):
             # 1-qadam: Telefon raqam kiritilganda kod yuborish
             phone = request.POST.get('phone')
             
+            if not phone:
+                messages.error(request, "Iltimos, telefon raqamingizni kiriting!")
+                return redirect('password_reset')
+                
             try:
-                profile = UserProfile.objects.get(phone__icontains=phone[-9:])
+                clean_phone = phone.replace('+', '').strip()
+                profile = UserProfile.objects.get(phone__icontains=clean_phone[-9:])
                 user = profile.user
                 
                 if not profile.telegram_id:
@@ -307,8 +312,8 @@ def password_reset_view(request):
                 profile = user.userprofile
                 
                 if profile.verification_code and profile.verification_code == input_code:
-                    if new_password != confirm_password:
-                        messages.error(request, "Xatolik: Yangi parollar bir xil emas!")
+                    if not new_password or new_password != confirm_password:
+                        messages.error(request, "Xatolik: Yangi parollar mos kelmadi yoki bo'sh!")
                         return render(request, 'furniture/password_reset.html', {'step': 'verify'})
                     
                     user.set_password(new_password)
@@ -330,12 +335,10 @@ def password_reset_view(request):
                 return redirect('password_reset')
 
     context = {
-        'step': 'verify' if user_id else 'phone'
+        'step': 'verify' if user_id else 'phone',
+        'bot_username': 'Master_MebelBot'
     }
     return render(request, 'furniture/password_reset.html', context)
-
-
-
 
 
 
