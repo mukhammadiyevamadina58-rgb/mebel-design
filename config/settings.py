@@ -177,3 +177,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 CSRF_TRUSTED_ORIGINS = [
     'https://mebel-design.onrender.com',
 ]
+
+TELEGRAM_BOT_TOKEN = "8761510532:AAGHywG5PCRdVQFAiV_zjelszE8RitMyngI"
